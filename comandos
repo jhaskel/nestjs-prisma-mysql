@@ -1,0 +1,35 @@
+npm run dev
+
+npm i class-validator class -transformer
+npm i @nestjs/mapped-types
+npm i -D prisma
+npm i @nestjs/jwt
+
+npx prisma init
+npx prisma db pull
+
+ //toda vez que altera o model precisa rodar
+
+//qdo altera dados na tabela
+npx prisma migrate dev --name addColumnRole
+
+npm i bcrypt
+npm i -D @types/bcrypt
+npm i @nestjs/throttler
+npm i @nestjs/config   
+npm i -D @types/multer
+
+npm i --save @nestjs-modules/mailer nodemailer
+npm i --save-dev @types/nodemailer
+mpm i --save pug
+
+
+
+
+
+
+
+
+
+local das validações:
+https://github.com/typestack/class-validator#validation-decorators

@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(128)
+  email     String    @db.VarChar(128)
+  password  String    @db.VarChar(128)
+  role      Int       @default(1)
+  createdAt DateTime? @default(now()) @db.Timestamp(0)
+  updatedAt DateTime? @default(now()) @db.Timestamp(0)
+  setores   Setor[]
+
+  @@map("users")
+}
+
+model Setor {
+  id     Int    @id @default(autoincrement())
+  name   String @default("0") @db.VarChar(50)
+  idUser Int?
+  users  User?  @relation(fields: [idUser], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_setores_users")
+
+  @@index([idUser], map: "idUser")
+  @@map("setores")
+}
