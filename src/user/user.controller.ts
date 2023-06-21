@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Param, Patch, Put,Post, Delete, ParseIntPipe, UseInterceptors, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Put,Post, Delete, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "./DTO/create-user-dto";
 import { UpdatePutUserDto } from "./DTO/update-put-user-dto";
 import { UpdatePatchUserDto } from "./DTO/update-patch-user-dto";
 import { UserService } from "./user.service";
-import { LogInterceptor } from "src/interceptors/log.interceptor";
+
 import { ParamId } from "src/decorators/param-id-decorator";
 import { Roles } from "src/decorators/role.decorator";
 import { Role } from "src/enums/role.enum";
@@ -34,28 +34,29 @@ export class UserController {
         return this.userService.list()
 
     }
-    @Roles(Role.Admin)
+   @Roles(Role.Admin,Role.User)
     @Get(':id')
     async show(@ParamId() id:number){
+        console.log("temos")
         return this.userService.show(id);
-
     }
+
 
     @Roles(Role.Admin)
     @Put(':id')
     async update(@Body() data:UpdatePutUserDto,@ParamId() id:number){
         return this.userService.update(id,data);
 
-
     }
+    
 
     @Roles(Role.Admin)
     @Patch(':id')
     async updatePartial(@Body() data:UpdatePatchUserDto,@ParamId() id:number){
         return  this.userService.updatePartial(id,data);
 
-
     }
+
     @Roles(Role.Admin)
     @Delete(':id')
     async delete(@ParamId() id:number){

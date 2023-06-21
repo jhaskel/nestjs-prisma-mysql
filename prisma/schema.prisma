@@ -8,24 +8,130 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(128)
-  email     String    @db.VarChar(128)
-  password  String    @db.VarChar(128)
-  role      Int       @default(1)
-  createdAt DateTime? @default(now()) @db.Timestamp(0)
-  updatedAt DateTime? @default(now()) @db.Timestamp(0)
-  setores   Setor[]
+  id                             Int         @id @default(autoincrement())
+  name                           String      @db.VarChar(128)
+  email                          String      @unique @db.VarChar(128)
+  password                       String      @db.VarChar(128)
+  role                           Int         @default(1)
+  image                          String      @default("0") @db.VarChar(128)
+  fone                           String      @default("0") @db.VarChar(128)
+  setorId                        Int         @default(1)
+  matricula                      String      @default("0") @db.VarChar(128)
+  cargo                          String      @default("0") @db.VarChar(128)
+  token                          String      @default("0") @db.VarChar(128)
+  forget                         String      @default("0") @db.VarChar(128)
+  isAtivo                        Boolean     @default(true)
+  createdAt                      DateTime?   @default(now()) @db.Timestamp(0)
+  updatedAt                      DateTime?   @default(now()) @db.Timestamp(0)
+  documentos                     Documento[]
+  usercargos                     UserCargo[]
+  setores                        Setor       @relation("setorIdTosetores", fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_users_setores")
 
+  @@index([setorId], map: "setorId")
   @@map("users")
 }
 
 model Setor {
-  id     Int    @id @default(autoincrement())
-  name   String @default("0") @db.VarChar(50)
-  idUser Int?
-  users  User?  @relation(fields: [idUser], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_setores_users")
+  id                           Int     @id @default(autoincrement())
+  name                         String  @default("0") @db.VarChar(50)
+  email                        String? @db.VarChar(50)
+  responsavel                  String? @db.VarChar(50)
+  secretario                   String? @db.VarChar(50)
+  sigla                        String? @db.VarChar(10)
+  tipos                        Tipo[]
+  users_users_setorIdTosetores User[]  @relation("setorIdTosetores")
 
-  @@index([idUser], map: "idUser")
   @@map("setores")
+}
+
+model Config {
+  id       Int     @id @default(autoincrement())
+  logo     String? @db.VarChar(250)
+  name     String? @db.VarChar(120)
+  endereco String? @db.VarChar(120)
+  site     String? @db.VarChar(120)
+  fone     String? @db.VarChar(50)
+  cnpj     String? @db.VarChar(50)
+  email    String? @db.VarChar(50)
+  isAtivo  Int?    @default(1) @db.TinyInt
+
+  @@map("config")
+}
+
+model Documento {
+  id              Int              @id @default(autoincrement())
+  tipoId          Int
+  userId          Int?
+  titulo          String?          @db.VarChar(50)
+  codigo          Int?
+  ano             Int?
+  isInterno       Boolean?         @default(true)
+  isAtivo         Boolean?         @default(true)
+  createdAt       DateTime?        @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime?        @default(now()) @db.Timestamp(0)
+  dc              dc1[]
+  tipos           Tipo             @relation(fields: [tipoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__tipos")
+  users           User?            @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_documentos_users")
+  itensdocumentos ItensDocumento[]
+
+  @@index([tipoId], map: "tipoId")
+  @@index([userId], map: "userId")
+  @@map("documentos")
+}
+
+model ItensDocumento {
+  id          Int        @id @default(autoincrement())
+  documentoId Int?
+  titulo      String?    @db.VarChar(128)
+  quantidade  Decimal?   @db.Decimal(10, 2)
+  unidade     String?    @db.VarChar(3)
+  anexo       String?    @db.VarChar(128)
+  isAtivo     Boolean?   @default(true)
+  createdAt   DateTime?  @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime?  @default(now()) @db.Timestamp(0)
+  documentos  Documento? @relation(fields: [documentoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_itensdocumentos_documentos")
+
+  @@index([documentoId], map: "documentoId")
+  @@map("itensdocumentos")
+}
+
+model Tipo {
+  id         Int         @id @default(autoincrement())
+  setorId    Int
+  name       String      @db.VarChar(50)
+  codigo     String      @db.VarChar(50)
+  documentos Documento[]
+  setores    Setor       @relation(fields: [setorId], references: [id], onDelete: Cascade, map: "FK__setores")
+
+  @@index([setorId], map: "setorId")
+  @@map("tipos")
+}
+
+model UserCargo {
+  id      Int      @id @default(autoincrement())
+  userId  Int
+  name    String   @db.VarChar(50)
+  isAtivo Boolean? @default(true)
+  users   User     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_usercargos_users")
+
+  @@index([userId], map: "userId")
+  @@map("usercargos")
+}
+
+model dc1 {
+  id           Int        @id @default(autoincrement())
+  documentoId  Int?
+  destinatario String     @default("0") @db.VarChar(120)
+  codigo       Int        @default(0)
+  ano          Int        @default(0)
+  setor        String     @default("0") @db.VarChar(250)
+  assunto      String     @default("0") @db.VarChar(250)
+  descricao    String     @db.Text
+  assign       String?    @db.VarChar(150)
+  cargo        String?    @db.VarChar(50)
+  matricula    String?    @db.VarChar(50)
+  documentos   Documento? @relation(fields: [documentoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_1dc_documentos")
+
+  @@index([documentoId], map: "documentoId")
+  @@map("1dc")
 }

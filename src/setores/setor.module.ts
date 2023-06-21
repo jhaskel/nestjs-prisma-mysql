@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
+import {  Module} from "@nestjs/common";
 import { SetorController } from "./setor.controller";
 import { SetorService } from "./setor.service";
 import { PrismaModule } from "src/prisma/prisma.module";

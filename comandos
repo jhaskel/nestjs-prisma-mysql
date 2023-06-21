@@ -6,12 +6,14 @@ npm i -D prisma
 npm i @nestjs/jwt
 
 npx prisma init
-npx prisma db pull
+npx prisma db push //envia todas as models pro banco
+npx prisma db pull //pega os dados do banco
 
  //toda vez que altera o model precisa rodar
-
+npx prisma generate
 //qdo altera dados na tabela
 npx prisma migrate dev --name addColumnRole
+npx prisma migrate dev --addColumnImage
 
 npm i bcrypt
 npm i -D @types/bcrypt
@@ -22,6 +24,10 @@ npm i -D @types/multer
 npm i --save @nestjs-modules/mailer nodemailer
 npm i --save-dev @types/nodemailer
 mpm i --save pug
+
+
+//gerar resources
+nest g resource users --no-spec
 
 
 

@@ -8,6 +8,7 @@ import { AuthRegisterDto } from "./dto/aut-register-dto";
 
 import * as bcrypt from 'bcrypt';
 import { MailerService } from "@nestjs-modules/mailer/dist";
+import e from "express";
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
     ) { }
 
     createToken(user: User) {
-        return {
+        const token = {
             accessToken: this.jwtService.sign({
                 id: user.id,
                 name: user.name,
@@ -37,6 +38,8 @@ export class AuthService {
 
             )
         }
+
+        return token.accessToken;
 
     }
 
@@ -85,7 +88,30 @@ export class AuthService {
             throw new UnauthorizedException('senha não corresponde!');
         }
 
-        return this.createToken(user);
+
+        const token = this.createToken(user);
+        const data = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+
+            role: user.role,
+            image: user.image,
+            fone: user.fone,
+            setorId: user.setorId,
+            matricula: user.matricula,
+            cargo: user.cargo,
+            token: token
+
+
+
+        }
+        return {
+            success: true,
+            message: 'Usuário Autenticado',
+            data: data
+        };
+
     }
 
     async forget(email: string) {
@@ -113,7 +139,7 @@ export class AuthService {
 
         await this.mailer.sendMail({
             subject: 'Recuperação de Senha',
-            to: 'johaskel@gmail.com',
+            to: email,
             template: 'forget',
             context: {
                 name: user.name,
@@ -155,14 +181,38 @@ export class AuthService {
         }
 
 
-
-
     }
 
-    async register(data: AuthRegisterDto) {
-        const user = await this.userService.create(data);
+    async register(data: AuthRegisterDto) {      
+        
+        const user = await this.userService.createRegister(data);        
 
-        return this.createToken(user);
+        try {
+           
+            const token = this.createToken(user);
+            const data2= {
+                id: user.id,
+                name: user.name,
+                password: user.password,
+                token:token              
+            }      
+    
+            return {
+                success: true,
+                message: 'Usuário Autenticado',
+                data: data2
+            };
+            
+        } catch (error) {
+            return{
+                success: false,
+                message: 'Não',
+                error: error
+            }
+            
+        }
+
+      
     }
 
 

@@ -30,10 +30,7 @@ export class SetorService {
             where: {
                 id: id
             },
-            include:{
-                users:true
-
-            }
+          
 
 
         });
@@ -86,7 +83,7 @@ export class SetorService {
         })))
 
 
-            throw new NotFoundException(`O usuário ${id} não existe`);
+            throw new NotFoundException(`O Setor ${id} não existe`);
     }
 
 }

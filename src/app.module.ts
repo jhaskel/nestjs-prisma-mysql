@@ -9,6 +9,17 @@ import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { ConfigsModule } from './configs/configs.module';
+import { UsersCargosModule } from './users-cargos/users-cargos.module';
+import { TiposModule } from './tipos/tipos.module';
+import { DocumentosModule } from './documentos/documentos.module';
+import { ItensDocumentosModule } from './itens-documentos/itens-documentos.module';
+import { Dc1Module } from './dc1/dc1.module';
+
+
+
+
+
 
 
 @Module({
@@ -26,16 +37,16 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
     MailerModule.forRoot({
       transport: {
       
-          host: 'smtp.ethereal.email',
+          host: 'smtp.gmail.com',
           port: 587,
           auth: {
-              user: 'bulah.corkery80@ethereal.email',
-              pass: 'kX5dPdnEYBc1m1GGVM'
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASS
           }
       
       },
       defaults: {
-        from: '"2bitsw" <bulah.corkery80@ethereal.email>',
+        from: '"2bitsw" <2bitsw@gmail.com>',
       },
       template: {
         dir: __dirname + '/templates',
@@ -45,6 +56,15 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
         },
       },
     }),
+   ConfigsModule,
+   UsersCargosModule,
+   TiposModule,
+   DocumentosModule,
+   ItensDocumentosModule,
+   Dc1Module,
+   
+   
+    
   
   ],
   controllers: [AppController],
