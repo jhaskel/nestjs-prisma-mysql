@@ -13,6 +13,8 @@ export class CreateSetorDto {
     email:string;
     @IsString()
     responsavel:string;
+    @IsString()
+    image:string;
   
 
     

@@ -14,7 +14,8 @@ import { UsersCargosModule } from './users-cargos/users-cargos.module';
 import { TiposModule } from './tipos/tipos.module';
 import { DocumentosModule } from './documentos/documentos.module';
 import { ItensDocumentosModule } from './itens-documentos/itens-documentos.module';
-import { Dc1Module } from './dc1/dc1.module';
+import { DocUserModule } from './docUser/docUser.module';
+import { DeclaracaoModule } from './declaracao/declaracao.module';
 
 
 
@@ -60,8 +61,9 @@ import { Dc1Module } from './dc1/dc1.module';
    UsersCargosModule,
    TiposModule,
    DocumentosModule,
-   ItensDocumentosModule,
-   Dc1Module,
+   ItensDocumentosModule,   
+   DocUserModule,
+   DeclaracaoModule
    
    
     

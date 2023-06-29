@@ -16,10 +16,21 @@ export class DocumentosController {
   findAll() {
     return this.documentosService.findAll();
   }
+  @Get('findByUser/:id')
+  findByUser(@Param('id') id: string) {
+    return this.documentosService.findByUser(+id);
+  }
+
+  
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.documentosService.findOne(+id);
+  }
+
+  @Get(':id')
+  findUser(@Param('id') id: string) {
+    return this.documentosService.findUser(+id);
   }
 
   @Patch(':id')

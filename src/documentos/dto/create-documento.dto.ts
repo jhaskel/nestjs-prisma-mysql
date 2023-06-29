@@ -5,7 +5,9 @@ export class CreateDocumentoDto {
     @IsNumber()
     tipoId:number;
     @IsNumber()
-    userId:number;    
+    userId:number;   
+    @IsNumber()
+    setorId:number;    
     @IsString()
     titulo:string;
     @IsNumber()  
@@ -17,6 +19,9 @@ export class CreateDocumentoDto {
     @IsOptional()
     @IsNumber()
     id:number;
+    @IsString()
+    status:string;
+    
     
    
 }

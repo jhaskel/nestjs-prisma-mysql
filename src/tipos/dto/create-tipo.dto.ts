@@ -7,5 +7,9 @@ export class CreateTipoDto {
     codigo:string;   
     @IsNumber()
     setorId:number;
+    @IsString()
+    image:string;
+    
+      
   
 }
