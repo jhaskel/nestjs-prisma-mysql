@@ -31,8 +31,17 @@ export class SetorService {
                 id: id
             },
           
+        });
+    }
 
+    
 
+    async findByUser(id: number) {     
+        await this.exists(id);   
+        return this.prisma.setor.findUnique({
+            where: {
+                id: id
+            },    
         });
     }
 

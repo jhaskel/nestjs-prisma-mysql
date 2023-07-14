@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDeclaracaoDto } from './dto/create-declaracao.dto';
 import { UpdateDeclaracaoDto } from './dto/update-declaracao.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class DeclaracaoService {
-  create(createDeclaracaoDto: CreateDeclaracaoDto) {
-    return 'This action adds a new declaracao';
+  constructor(private prisma:PrismaService){}
+
+
+  create(data: CreateDeclaracaoDto) {
+    return this.prisma.declaracao.create({
+      data
+    })
   }
 
   findAll() {
-    return `This action returns all declaracao`;
+    return this.prisma.declaracao.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} declaracao`;
+    return this.prisma.declaracao.findUnique({
+      where:{id}
+    })
   }
 
-  update(id: number, updateDeclaracaoDto: UpdateDeclaracaoDto) {
-    return `This action updates a #${id} declaracao`;
+  async update(id: number, data: UpdateDeclaracaoDto) {
+     
+    await this.exists(id);    
+   
+    return  this.prisma.declaracao.update({
+       data,
+        where:{
+            id:id
+        }
+        
+    });   
   }
 
   remove(id: number) {
-    return `This action removes a #${id} declaracao`;
+    return `This action removes a #${id} config`;
   }
+
+  async exists(id:number){
+
+    if(!(await this.prisma.declaracao.count({
+        where :{
+            id
+        }
+
+    })))
+
+
+    throw new NotFoundException(`A declaração ${id} não existe`);
+}
 }

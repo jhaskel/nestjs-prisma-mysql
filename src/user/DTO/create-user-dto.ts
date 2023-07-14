@@ -16,8 +16,7 @@ export class CreateUserDto {
         minUppercase:0
         
     })
-    password:string
-    
+    password:string    
     @IsOptional()
     @IsString()    
     image:string;   

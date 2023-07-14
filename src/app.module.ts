@@ -13,12 +13,16 @@ import { ConfigsModule } from './configs/configs.module';
 import { UsersCargosModule } from './users-cargos/users-cargos.module';
 import { TiposModule } from './tipos/tipos.module';
 import { DocumentosModule } from './documentos/documentos.module';
-import { ItensDocumentosModule } from './itens-documentos/itens-documentos.module';
 import { DocUserModule } from './docUser/docUser.module';
 import { DeclaracaoModule } from './declaracao/declaracao.module';
-
-
-
+import { AnexosModule } from './anexos/anexos.module';
+import { MessagesModule } from './messages/messages.module';
+import { FavoritosModule } from './favoritos/favoritos.module';
+import { FrotaVeiculosModule } from './frota/frota-veiculos/frota-veiculos.module';
+import { FrotaVeiculoUserModule } from './frota/frota-veiculo-user/frota-veiculo-user.module';
+import { FrotaAbastecimentoModule } from './frota/frota-abastecimento/frota-abastecimento.module';
+import { FrotaReservaModule } from './frota/frota-reserva/frota-reserva.module';
+import { FrotaViagemModule } from './frota/frota-viagem/frota-viagem.module';
 
 
 
@@ -43,8 +47,7 @@ import { DeclaracaoModule } from './declaracao/declaracao.module';
           auth: {
               user: process.env.EMAIL_USER,
               pass: process.env.EMAIL_PASS
-          }
-      
+          }      
       },
       defaults: {
         from: '"2bitsw" <2bitsw@gmail.com>',
@@ -60,13 +63,17 @@ import { DeclaracaoModule } from './declaracao/declaracao.module';
    ConfigsModule,
    UsersCargosModule,
    TiposModule,
-   DocumentosModule,
-   ItensDocumentosModule,   
+   DocumentosModule,   
    DocUserModule,
-   DeclaracaoModule
-   
-   
-    
+   DeclaracaoModule,
+   AnexosModule,
+   MessagesModule,
+   FavoritosModule,
+   FrotaVeiculosModule,
+   FrotaVeiculoUserModule,
+   FrotaAbastecimentoModule,
+   FrotaViagemModule,
+   FrotaReservaModule,    
   
   ],
   controllers: [AppController],

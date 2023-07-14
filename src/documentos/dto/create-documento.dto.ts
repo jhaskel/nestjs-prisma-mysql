@@ -1,4 +1,4 @@
-import { IsBoolean, IsInt, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsBoolean,  IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateDocumentoDto {
     
@@ -10,10 +10,10 @@ export class CreateDocumentoDto {
     setorId:number;    
     @IsString()
     titulo:string;
-    @IsNumber()  
-    codigo:number;
-    @IsNumber()
-    ano:number;
+    @IsString()  
+    codigo:string;
+    @IsString()
+    ano:string;
     @IsBoolean()
     isInterno:boolean     
     @IsOptional()

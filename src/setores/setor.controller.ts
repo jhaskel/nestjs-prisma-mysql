@@ -37,6 +37,14 @@ export class SetorController {
 
     }
 
+      
+
+    @Get('findByUser/:id')
+    async findByUser(@ParamId() id:number){
+        return this.setorService.findByUser(id);
+
+    }
+
     @Put(':id')
     async update(@Body() data:UpdatePutSetorDto,@ParamId() id:number){
         return this.setorService.update(id,data);

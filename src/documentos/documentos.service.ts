@@ -2,8 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDocumentoDto } from './dto/create-documento.dto';
 import { UpdateDocumentoDto } from './dto/update-documento.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-
-import { CreateDocUserDto } from 'src/docUser/dto/create-docUser.dto';
 import { DocUserService } from 'src/docUser/docUser.service';
 
 @Injectable()
@@ -46,19 +44,107 @@ export class DocumentosService {
   }
   
   async findByUser(id:number) {
-    return this.prisma.documento.findMany({
-      where:{userId:id},
+    return this.prisma.documento.findMany({     
+      where:{
+        docuser:{some:{userId:id}
+          
+        }
+      } ,
       include:{
-        docuser:{include:{
+        docuser:{            
+          include:{
           users:{select:{name:true,image:true}}
         }},
         tipos:{select:{name:true,image:true}},
+        setores:{select:{id:true,name:true,image:true,sigla:true}},
         users:{select:{name:true,image:true}},
-        setores:{select:{name:true,image:true}}
+        
+        mess:{select:{documentoId:true}},
+        anexo:{select:{documentoId:true}}
       },
       orderBy:{id:"desc" },
       
       
+
+    }); 
+  }
+
+  async findByUserFav(id:number) {
+    return this.prisma.documento.findMany({     
+      where:{
+        docuser:{some:{userId:id}
+          
+        },
+        AND:{
+          favoritos:{some:{userId:id}}
+        }
+       
+        
+      } ,
+      include:{
+        docuser:{            
+          include:{
+          users:{select:{name:true,image:true}}
+        }},
+        tipos:{select:{name:true,image:true}},
+        setores:{select:{id:true,name:true,image:true,sigla:true}},
+        users:{select:{name:true,image:true}},
+        
+        mess:{select:{documentoId:true}},
+        anexo:{select:{documentoId:true}}
+      },
+      orderBy:{id:"desc" },
+      
+      
+
+    }); 
+  }
+
+
+  
+  async findByUserSearch(id:number,txt:string) {
+   
+    return this.prisma.documento.findMany({
+           
+      where:{        
+          docuser:{some:{userId:id},}, 
+        
+        AND:[{
+          OR:[          
+            {titulo: { contains: txt,}},          
+            {codigo: {contains: txt}},
+            {ano: {contains:txt}},            
+            {status: {contains: txt,},},           
+            {users: {name:{contains:txt}},},
+            {tipos: {name:{contains:txt}},},
+            {setores: {name:{contains:txt}},},
+          ] 
+        }]
+      } ,
+      include:{
+        docuser:{            
+          include:{
+          users:{select:{name:true,image:true}}
+        }},
+        tipos:{select:{name:true,image:true}},
+        setores:{select:{id:true,name:true,image:true,sigla:true}},
+        users:{select:{name:true,image:true}},
+        
+        mess:{select:{documentoId:true}},
+        anexo:{select:{documentoId:true}}
+      },
+      orderBy:{id:"desc" },
+      
+      
+
+    }); 
+  }
+
+  async countByUser(id:number) {
+    return this.prisma.documento.count({     
+      where:{
+       userId:id
+      }        
 
     }); 
   }
@@ -93,7 +179,7 @@ export class DocumentosService {
  async update(id: number, data: UpdateDocumentoDto) {
   await this.exists(id);
     return this.prisma.documento.update({
-      where:{id},
+      where:{id:id},
       data:data
     })
   }

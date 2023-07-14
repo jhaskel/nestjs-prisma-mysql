@@ -23,6 +23,11 @@ export class TiposController {
     return this.tiposService.findOne(+id);
   }
 
+   @Get('findBySetor/:id')
+  findBySetor(@Param('id') id: string) {
+    return this.tiposService.findBySetor(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTipoDto: UpdateTipoDto) {
     return this.tiposService.update(+id, updateTipoDto);

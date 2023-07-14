@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TiposService {
+  [x: string]: any;
   constructor(private prisma:PrismaService){}
 
  
@@ -24,6 +25,13 @@ export class TiposService {
     await this.exists(id);
     return this.prisma.tipo.findUnique({
       where:{id}
+    })
+  }
+
+  async findBySetor(id: number) {
+    await this.exists(id);
+    return this.prisma.tipo.findMany({
+      where:{setorId:id}
     })
   }
 
