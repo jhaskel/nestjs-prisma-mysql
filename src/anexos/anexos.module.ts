@@ -4,8 +4,8 @@ import { AnexosController } from './anexos.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports:[PrismaModule],
+  imports: [PrismaModule],
   controllers: [AnexosController],
-  providers: [AnexosService]
+  providers: [AnexosService],
 })
 export class AnexosModule {}

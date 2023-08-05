@@ -4,9 +4,9 @@ import { FrotaVeiculosController } from './frota-veiculos.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports:[PrismaModule],
+  imports: [PrismaModule],
   controllers: [FrotaVeiculosController],
   providers: [FrotaVeiculosService],
-  exports:[FrotaVeiculosService]
+  exports: [FrotaVeiculosService],
 })
 export class FrotaVeiculosModule {}

@@ -8,66 +8,70 @@ datasource db {
 }
 
 model User {
-  id                                                      Int                  @id @default(autoincrement())
-  name                                                    String               @db.VarChar(128)
-  email                                                   String               @unique @db.VarChar(128)
-  password                                                String               @db.VarChar(128)
-  role                                                    Int                  @default(1)
-  image                                                   String               @default("0") @db.VarChar(128)
-  fone                                                    String               @default("0") @db.VarChar(128)
-  setorId                                                 Int                  @default(1)
-  matricula                                               String               @default("0") @db.VarChar(128)
-  cargo                                                   String               @default("0") @db.VarChar(128)
-  token                                                   String               @default("0") @db.VarChar(128)
-  forget                                                  String               @default("0") @db.VarChar(128)
-  isAtivo                                                 Boolean              @default(true)
-  createdAt                                               DateTime?            @default(now()) @db.Timestamp(0)
-  updatedAt                                               DateTime?            @default(now()) @db.Timestamp(0)
-  agenda                                                  Agenda[]
-  documentos                                              Documento[]
-  docuser                                                 docuser[]
-  favoritos                                               favoritos[]
-  frotaabastecimento                                      FrotaAbastecimento[]
-  frotaviagems                                        FrotaViagem[]
-  frotareservas_frotareservas_userIdTousers               FrotaReserva[]       @relation("frotareservas_userIdTousers")
-  frotareservas_frotareservas_autorizationIdTousers       FrotaReserva[]       @relation("frotareservas_autorizationIdTousers")
-  frotaveiculouser_frotaveiculouser_userIdTousers         FrotaVeiculoUser[]   @relation("frotaveiculouser_userIdTousers")
-  frotaveiculouser_frotaveiculouser_autorizationIdTousers FrotaVeiculoUser[]   @relation("frotaveiculouser_autorizationIdTousers")
-  messages_messages_remetenteTousers                      messages[]           @relation("messages_remetenteTousers")
-  messages_messages_destinatarioTousers                   messages[]           @relation("messages_destinatarioTousers")
-  usercargos                                              UserCargo[]
-  setores                                                 Setor                @relation("setorIdTosetores", fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_users_setores")
+  id                                                Int                  @id @default(autoincrement())
+  role                                              Int                  @default(1)
+  idSetor                                           Int                  @default(1)
+  name                                              String               @db.VarChar(128)
+  email                                             String               @unique @db.VarChar(128)
+  password                                          String               @db.VarChar(128)
+  image                                             String               @default("0") @db.VarChar(128)
+  fone                                              String               @default("0") @db.VarChar(128)
+  matricula                                         String               @unique(map: "matricula") @default("0") @db.VarChar(128)
+  cargo                                             String               @default("0") @db.VarChar(128)
+  token                                             String               @default("0") @db.VarChar(128)
+  forget                                            String               @default("0") @db.VarChar(128)
+  isAtivo                                           Boolean              @default(true)
+  createdAt                                         DateTime?            @default(now()) @db.Timestamp(0)
+  updatedAt                                         DateTime?            @default(now()) @db.Timestamp(0)
+  agenda                                            Agenda[]
+  documentos                                        Documento[]
+  docuser                                           docuser[]
+  favoritos                                         favoritos[]
+  frotaabastecimento                                FrotaAbastecimento[]
+  frotareservas_frotareservas_userIdTousers         FrotaReserva[]       @relation("frotareservas_userIdTousers")
+  frotareservas_frotareservas_autorizationIdTousers FrotaReserva[]       @relation("frotareservas_autorizationIdTousers")
+  frotaveiculos                                     FrotaVeiculos[]
+  frotaveiculouser_frotaveiculouser_userIdTousers   FrotaVeiculoUser[]   @relation("frotaveiculouser_userIdTousers")
+  frotaviagems                                      FrotaViagem[]
+  messages_messages_remetenteTousers                messages[]           @relation("messages_remetenteTousers")
+  messages_messages_destinatarioTousers             messages[]           @relation("messages_destinatarioTousers")
+  setores                                           Setor[]
+  setoruser                                         setoruser[]
+  usercargos                                        UserCargo[]
 
-  @@index([setorId], map: "setorId")
   @@map("users")
 }
 
 model Setor {
-  id                           Int             @id @default(autoincrement())
-  name                         String          @default("0") @db.VarChar(50)
-  email                        String?         @db.VarChar(50)
-  responsavel                  String?         @db.VarChar(50)
-  secretario                   String?         @db.VarChar(50)
-  sigla                        String?         @db.VarChar(10)
-  image                        String?         @db.VarChar(250)
-  documentos                   Documento[]
-  frotaveiculos                FrotaVeiculos[]
-  tipos                        Tipo[]
-  users_users_setorIdTosetores User[]          @relation("setorIdTosetores")
+  id            Int             @id @default(autoincrement())
+  secretarioId  Int?
+  name          String          @default("0") @db.VarChar(50)
+  responsavel   String?         @db.VarChar(50)
+  email         String?         @db.VarChar(50)
+  secretario    String?         @db.VarChar(50)
+  sigla         String?         @db.VarChar(10)
+  image         String?         @db.VarChar(250)
+  agenda        Agenda[]
+  documentos    Documento[]
+  frotaveiculos FrotaVeiculos[]
+  users         User?           @relation(fields: [secretarioId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_setores_users")
+  setoruser     setoruser[]
+  tipos         Tipo[]
 
+  @@index([secretarioId], map: "FK_setores_users")
   @@map("setores")
 }
 
 model Config {
-  id       Int     @id @default(autoincrement())
-  logo     String? @db.VarChar(250)
-  name     String? @db.VarChar(120)
-  endereco String? @db.VarChar(120)
-  site     String? @db.VarChar(120)
-  fone     String? @db.VarChar(50)
-  cnpj     String? @db.VarChar(50)
-  email    String? @db.VarChar(50)
-  isAtivo  Int?    @default(1) @db.TinyInt
+  id       Int      @id @default(autoincrement())
+  logo     String?  @db.VarChar(250)
+  name     String?  @db.VarChar(120)
+  endereco String?  @db.VarChar(120)
+  site     String?  @db.VarChar(120)
+  fone     String?  @db.VarChar(50)
+  cnpj     String?  @db.VarChar(50)
+  email    String?  @db.VarChar(50)
+  isAtivo  Boolean? @default(true)
 
   @@map("config")
 }
@@ -112,7 +116,6 @@ model Tipo {
   name       String      @db.VarChar(50)
   codigo     String      @db.VarChar(50)
   image      String      @db.VarChar(350)
-  agenda     Agenda[]
   documentos Documento[]
   setores    Setor       @relation(fields: [setorId], references: [id], onDelete: Cascade, map: "FK__setores")
 
@@ -210,7 +213,7 @@ model FrotaAbastecimento {
   veiculoId     Int?
   createdAt     DateTime?      @default(now()) @db.Timestamp(0)
   kmAt          Int?
-  litros        Float?
+  litros        Float?         @db.Float
   frotaveiculos FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__frotaveiculos")
   users         User?          @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__usersfrotaveiculos")
 
@@ -225,9 +228,9 @@ model FrotaViagem {
   userId        Int?
   reservaId     Int?
   createdAt     DateTime?      @default(now()) @db.Timestamp(0)
-  finalAt       DateTime?      
+  finalAt       DateTime?      @db.Timestamp(0)
   isAtivo       Boolean?       @default(true)
-  isIniciada    Boolean?       @default(true)
+  isAtiva       Boolean?       @default(true)
   kmInicial     Int?
   kmFinal       Int?
   destino       String?        @db.VarChar(250)
@@ -243,21 +246,21 @@ model FrotaViagem {
 }
 
 model FrotaReserva {
-  id                                        Int                @id @default(autoincrement())
-  userId                                    Int?
-  autorizationId                            Int?
-  veiculoId                                 Int?
-  destino                                   String?            @db.VarChar(250)
-  motivo                                    String?            @db.Text
-  status                                    String?            @db.VarChar(100)
-  reservedTo                                DateTime?          @db.Timestamp(0)
-  createdAt                                 DateTime?          @default(now()) @db.Timestamp(0)
-  modifiedAt                                DateTime?          @default(now()) @db.Timestamp(0)
-  isAtivo                                   Boolean?           @default(true)
-  frotaviagems                          FrotaViagem[]
-  users_frotareservas_userIdTousers         User?              @relation("frotareservas_userIdTousers", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotareserva_users")
-  frotaveiculos                             FrotaVeiculos?     @relation(fields: [veiculoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotareserva_veiculos")
-  users_frotareservas_autorizationIdTousers User?              @relation("frotareservas_autorizationIdTousers", fields: [autorizationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotareservas_autorization_users")
+  id             Int            @id @default(autoincrement())
+  userId         Int?
+  autorizationId Int?
+  veiculoId      Int?
+  destino        String?        @db.VarChar(250)
+  motivo         String?        @db.Text
+  status         String?        @db.VarChar(100)
+  reservedTo     DateTime?      @db.Timestamp(0)
+  createdAt      DateTime?      @default(now()) @db.Timestamp(0)
+  modifiedAt     DateTime?      @default(now()) @db.Timestamp(0)
+  isAtivo        Boolean?       @default(true)
+  users          User?          @relation("frotareservas_userIdTousers", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotareserva_users")
+  frotaveiculos  FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotareserva_veiculos")
+  autorization   User?          @relation("frotareservas_autorizationIdTousers", fields: [autorizationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotareservas_autorization_users")
+  frotaviagems   FrotaViagem[]
 
   @@index([autorizationId], map: "autorizationId")
   @@index([userId], map: "userId")
@@ -268,6 +271,7 @@ model FrotaReserva {
 model FrotaVeiculos {
   id                 Int                  @id @default(autoincrement())
   setorId            Int?
+  responsavelId      Int?
   marca              String?              @db.VarChar(50)
   modelo             String?              @db.VarChar(100)
   name               String?              @db.VarChar(10)
@@ -275,34 +279,31 @@ model FrotaVeiculos {
   placa              String?              @db.VarChar(10)
   chassi             String?              @db.VarChar(50)
   km                 Int?
+  litros             Int?
   image              String?              @db.VarChar(250)
-  status             String?              @db.VarChar(50)
+  isViagem           Boolean?             @default(false)
   isAtivo            Boolean?             @default(true)
   frotaabastecimento FrotaAbastecimento[]
-  frotaviagems   FrotaViagem[]
   frotareservas      FrotaReserva[]
   setores            Setor?               @relation(fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculos_setores")
+  responsavel        User?                @relation(fields: [responsavelId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculos_users")
   frotaveiculouser   FrotaVeiculoUser[]
+  frotaviagems       FrotaViagem[]
 
   @@index([setorId], map: "setorId")
+  @@index([responsavelId], map: "responsavelId")
   @@map("frotaveiculos")
 }
 
 model FrotaVeiculoUser {
-  id             Int            @id @default(autoincrement())
-  userId         Int?
-  veiculoId      Int?
-  autorizationId Int?
-  createdAt      DateTime?      @db.Timestamp(0)
-  updatedAt      DateTime?      @db.Timestamp(0)
-  isAtivo        Boolean?       @default(true)
-  isResponsavel  Boolean?       @default(false)
-  isOcupando     Boolean?       @default(false)
-  veiculos       FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculouser_frotaveiculos")
-  usuario        User?          @relation("frotaveiculouser_userIdTousers", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculouser_users")
-  autorizado     User?          @relation("frotaveiculouser_autorizationIdTousers", fields: [autorizationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculouser_users_2")
+  id        Int            @id @default(autoincrement())
+  userId    Int?
+  veiculoId Int?
+  isAtivo   Boolean?       @default(true)
+  isTitular Boolean?       @default(false)
+  veiculos  FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculouser_frotaveiculos")
+  usuario   User?          @relation("frotaveiculouser_userIdTousers", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculouser_users")
 
-  @@index([autorizationId], map: "autorizationId")
   @@index([userId], map: "userId")
   @@index([veiculoId], map: "veiculoId")
   @@map("frotaveiculouser")
@@ -316,12 +317,24 @@ model Agenda {
   modifiedAt DateTime? @default(now()) @db.Timestamp(0)
   isAtivo    Boolean?  @default(true)
   situacao   String?   @db.Text
+  status     String    @default("trabalhando") @db.VarChar(50)
   local      String?   @db.VarChar(250)
   retornoAt  DateTime? @default(now()) @db.Timestamp(0)
-  tipos      Tipo?     @relation(fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_agenda_tipos")
-  users      User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_agenda_users")
+  setores    Setor?    @relation(fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_agenda_tipos")
+  users      User?     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_agenda_users")
 
   @@index([setorId], map: "setorId")
   @@index([userId], map: "userId")
   @@map("agenda")
+}
+
+model setoruser {
+  id      Int   @id @default(autoincrement())
+  userId  Int
+  setorId Int
+  setores Setor @relation(fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_setoruser_setores")
+  users   User  @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_setoruser_users")
+
+  @@index([setorId], map: "FK_setoruser_setores")
+  @@index([userId], map: "FK_setoruser_users")
 }

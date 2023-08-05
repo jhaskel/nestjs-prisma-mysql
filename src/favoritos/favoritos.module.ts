@@ -5,8 +5,8 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { DocUserService } from 'src/docUser/docUser.service';
 
 @Module({
-  imports:[PrismaModule],
+  imports: [PrismaModule],
   controllers: [FavoritosController],
-  providers: [FavoritosService,DocUserService]
+  providers: [FavoritosService, DocUserService],
 })
 export class FavoritosModule {}

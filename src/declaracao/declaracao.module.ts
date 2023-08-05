@@ -4,8 +4,8 @@ import { DeclaracaoController } from './declaracao.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports:[PrismaModule],
+  imports: [PrismaModule],
   controllers: [DeclaracaoController],
-  providers: [DeclaracaoService]
+  providers: [DeclaracaoService],
 })
 export class DeclaracaoModule {}

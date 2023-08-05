@@ -1,15 +1,10 @@
-import { IsNumber, IsOptional } from "class-validator";
+import { IsNumber, IsOptional } from 'class-validator';
 
 export class CreateDocUserDto {
-   
-   @IsOptional()
-    @IsNumber()
-    docId:number;
-    @IsOptional()
-    @IsNumber()
-    userId:number;
-   
-
-  
-  
+  @IsOptional()
+  @IsNumber()
+  docId: number;
+  @IsOptional()
+  @IsNumber()
+  userId: number;
 }

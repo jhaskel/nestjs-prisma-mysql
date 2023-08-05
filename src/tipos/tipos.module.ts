@@ -4,8 +4,8 @@ import { TiposController } from './tipos.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports:[PrismaModule],
+  imports: [PrismaModule],
   controllers: [TiposController],
-  providers: [TiposService]
+  providers: [TiposService],
 })
 export class TiposModule {}

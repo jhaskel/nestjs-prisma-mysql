@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AnexosService } from './anexos.service';
 import { CreateAnexoDto } from './dto/create-anexo.dto';
 import { UpdateAnexoDto } from './dto/update-anexo.dto';

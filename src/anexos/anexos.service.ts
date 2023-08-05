@@ -5,50 +5,44 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AnexosService {
+  constructor(private prisma: PrismaService) {}
 
-  constructor(private prisma:PrismaService){}
-
- 
   async create(data: CreateAnexoDto) {
     return this.prisma.anexo.create({
-      data
-    })
-    
+      data,
+    });
   }
 
-
   async findAll() {
-    return this.prisma.anexo.findMany(); 
+    return this.prisma.anexo.findMany();
   }
 
   async findOne(id: number) {
     await this.exists(id);
     return this.prisma.anexo.findUnique({
-      where:{id}
-    })
+      where: { id },
+    });
   }
 
- async update(id: number, data: UpdateAnexoDto) {
-  await this.exists(id);
+  async update(id: number, data: UpdateAnexoDto) {
+    await this.exists(id);
     return this.prisma.anexo.update({
-      where:{id},
-      data:data
-    })
+      where: { id },
+      data: data,
+    });
   }
 
-  
   async remove(id: number) {
     await this.exists(id);
-    return this.prisma.anexo.delete({where:{id}})
+    return this.prisma.anexo.delete({ where: { id } });
   }
 
-  
   async exists(id: number) {
-    if (!(await this.prisma.anexo.count({
-        where: {id }
-    })))
-        throw new NotFoundException(`O Cargo com id ${id} não existe`);
-}
-
-
+    if (
+      !(await this.prisma.anexo.count({
+        where: { id },
+      }))
+    )
+      throw new NotFoundException(`O Cargo com id ${id} não existe`);
+  }
 }

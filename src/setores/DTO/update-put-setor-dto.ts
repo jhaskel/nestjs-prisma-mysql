@@ -1,10 +1,3 @@
-import { CreateSetorDto } from "./create-setor-dto";
+import { CreateSetorDto } from './create-setor-dto';
 
-
-
-export class UpdatePutSetorDto extends CreateSetorDto{
-
- 
-
-
-}
+export class UpdatePutSetorDto extends CreateSetorDto {}

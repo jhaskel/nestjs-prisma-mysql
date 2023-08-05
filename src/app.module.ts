@@ -23,31 +23,28 @@ import { FrotaVeiculoUserModule } from './frota/frota-veiculo-user/frota-veiculo
 import { FrotaAbastecimentoModule } from './frota/frota-abastecimento/frota-abastecimento.module';
 import { FrotaReservaModule } from './frota/frota-reserva/frota-reserva.module';
 import { FrotaViagemModule } from './frota/frota-viagem/frota-viagem.module';
-
-
-
+import { AgendaModule } from './agenda/agenda.module';
+import { SetorUserModule } from './setor-user/setor-user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     ThrottlerModule.forRoot({
-      limit:100,// 10 vezes em 1 segundo
-      ttl:60,      //equivale a 1 segundo
-      ignoreUserAgents:[/googlebot/gi]
-
+      limit: 100, // 10 vezes em 1 segundo
+      ttl: 60, //equivale a 1 segundo
+      ignoreUserAgents: [/googlebot/gi],
     }),
-    forwardRef(()=>UserModule),
-    forwardRef(()=>AuthModule),
+    forwardRef(() => UserModule),
+    forwardRef(() => AuthModule),
     SetorModule,
     MailerModule.forRoot({
       transport: {
-      
-          host: 'smtp.gmail.com',
-          port: 587,
-          auth: {
-              user: process.env.EMAIL_USER,
-              pass: process.env.EMAIL_PASS
-          }      
+        host: 'smtp.gmail.com',
+        port: 587,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
       },
       defaults: {
         from: '"2bitsw" <2bitsw@gmail.com>',
@@ -60,25 +57,30 @@ import { FrotaViagemModule } from './frota/frota-viagem/frota-viagem.module';
         },
       },
     }),
-   ConfigsModule,
-   UsersCargosModule,
-   TiposModule,
-   DocumentosModule,   
-   DocUserModule,
-   DeclaracaoModule,
-   AnexosModule,
-   MessagesModule,
-   FavoritosModule,
-   FrotaVeiculosModule,
-   FrotaVeiculoUserModule,
-   FrotaAbastecimentoModule,
-   FrotaViagemModule,
-   FrotaReservaModule,    
-  
+    ConfigsModule,
+    UsersCargosModule,
+    TiposModule,
+    DocumentosModule,
+    DocUserModule,
+    DeclaracaoModule,
+    AnexosModule,
+    MessagesModule,
+    FavoritosModule,
+    FrotaVeiculosModule,
+    FrotaVeiculoUserModule,
+    FrotaAbastecimentoModule,
+    FrotaViagemModule,
+    FrotaReservaModule,
+    AgendaModule,
+    SetorUserModule,
   ],
   controllers: [AppController],
-  providers: [AppService,{
-    provide: APP_GUARD, useClass:ThrottlerGuard
-  }],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

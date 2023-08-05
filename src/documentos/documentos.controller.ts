@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { DocumentosService } from './documentos.service';
 import { CreateDocumentoDto } from './dto/create-documento.dto';
 import { UpdateDocumentoDto } from './dto/update-documento.dto';
@@ -27,15 +35,14 @@ export class DocumentosController {
   }
 
   @Get('findByUserSearch/:id/:txt')
-  findByUserSearch(@Param('id') id: string,@Param('txt') txt: string) {
-    return this.documentosService.findByUserSearch(+id,txt);
+  findByUserSearch(@Param('id') id: string, @Param('txt') txt: string) {
+    return this.documentosService.findByUserSearch(+id, txt);
   }
 
   @Get('countByUser/:id')
   countByUser(@Param('id') id: string) {
     return this.documentosService.countByUser(+id);
   }
- 
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -48,7 +55,10 @@ export class DocumentosController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDocumentoDto: UpdateDocumentoDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateDocumentoDto: UpdateDocumentoDto,
+  ) {
     return this.documentosService.update(+id, updateDocumentoDto);
   }
 

@@ -4,8 +4,8 @@ import { FrotaAbastecimentoController } from './frota-abastecimento.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports:[PrismaModule],
+  imports: [PrismaModule],
   controllers: [FrotaAbastecimentoController],
-  providers: [FrotaAbastecimentoService]
+  providers: [FrotaAbastecimentoService],
 })
 export class FrotaAbastecimentoModule {}

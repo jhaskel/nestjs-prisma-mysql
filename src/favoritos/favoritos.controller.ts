@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Param, Delete } from '@nestjs/common';
 import { FavoritosService } from './favoritos.service';
 import { CreateFavoritoDto } from './dto/create-favorito.dto';
-
 
 @Controller('favoritos')
 export class FavoritosController {
@@ -11,7 +10,6 @@ export class FavoritosController {
   create(@Body() createFavoritoDto: CreateFavoritoDto) {
     return this.favoritosService.create(createFavoritoDto);
   }
-  
 
   @Delete(':id')
   remove(@Param('id') id: string) {

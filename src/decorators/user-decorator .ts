@@ -1,25 +1,23 @@
-import { ExecutionContext, NotFoundException, createParamDecorator } from "@nestjs/common";
+import {
+  ExecutionContext,
+  NotFoundException,
+  createParamDecorator,
+} from '@nestjs/common';
 
-export const User = createParamDecorator((filter:string,context:ExecutionContext)=>{
+export const User = createParamDecorator(
+  (filter: string, context: ExecutionContext) => {
+    const request = context.switchToHttp().getRequest();
 
-   const request = context.switchToHttp().getRequest();
-
-  if(request.user){
-
-    if(filter){
+    if (request.user) {
+      if (filter) {
         return request.user[filter];
-
-    }else{
+      } else {
         return request.user;
+      }
+    } else {
+      throw new NotFoundException(
+        'Usuário não encontrado no REquest. Use o AuthGuard para obter o usuário',
+      );
     }
-   
-
-  }else{
-
-    throw new NotFoundException('Usuário não encontrado no REquest. Use o AuthGuard para obter o usuário');
-
-  }
-  
-  
-
-});
+  },
+);
