@@ -74,11 +74,7 @@ export class AuthService {
     });
 
     if (!user) {
-<<<<<<< HEAD
       throw new UnauthorizedException('matricula não corresponde!');
-=======
-      throw new UnauthorizedException('Email corresponde!');
->>>>>>> d3682b0bc4ca8bc80a084bdd93fe8ee56fc64a50
     }
 
     if (!(await bcrypt.compare(password, user.password))) {
@@ -114,11 +110,7 @@ export class AuthService {
     });
 
     if (!user) {
-<<<<<<< HEAD
       throw new UnauthorizedException('email está incorreto');
-=======
-      throw new UnauthorizedException('Email está incorreto');
->>>>>>> d3682b0bc4ca8bc80a084bdd93fe8ee56fc64a50
     }
     const token = this.jwtService.sign(
       {
