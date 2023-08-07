@@ -19,13 +19,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "preprod": "npm run format && npm run lint",
-<<<<<<< HEAD
     "prod": "npm run build",
     "heroku-postbuild": "NODE_ENV=dev npm install --omit --no-shrinkwrap && npm run build"
 
-=======
-    "prod": "npm run build"
->>>>>>> d3682b0bc4ca8bc80a084bdd93fe8ee56fc64a50
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",
