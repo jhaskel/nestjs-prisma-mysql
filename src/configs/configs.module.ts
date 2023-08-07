@@ -4,8 +4,8 @@ import { ConfigsController } from './configs.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports:[PrismaModule],
+  imports: [PrismaModule],
   controllers: [ConfigsController],
-  providers: [ConfigsService]
+  providers: [ConfigsService],
 })
 export class ConfigsModule {}

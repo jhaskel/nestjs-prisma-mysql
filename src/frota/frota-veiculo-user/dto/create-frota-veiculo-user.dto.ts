@@ -1,11 +1,7 @@
-import { IsNumber } from "class-validator";
+import { IsNumber } from 'class-validator';
 
 export class CreateFrotaVeiculoUserDto {
-    @IsNumber()
-    userId:number;
-    veiculoId:number;
-    autorizationId:number;
-    
-    
-    
+  @IsNumber()
+  userId: number;
+  veiculoId: number;
 }

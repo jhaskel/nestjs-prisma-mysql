@@ -29,6 +29,11 @@ mpm i --save pug
 //gerar resources
 nest g resource users --no-spec
 
+//gerar build
+npm run preprod
+npm run prod
+npm run start:prod
+
 
 
 

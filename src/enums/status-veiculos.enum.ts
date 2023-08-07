@@ -1,8 +1,5 @@
-
-export enum StatusVeiculo {
-    disponivel = 'disponível',
-    viagem = 'viagem',
-    reservado = 'Reservado',
-    conserto = 'Conserto',
-    inativo = 'Inativo'
+export enum StatusReserva {
+  pendente = 'pendente',
+  aprovado = 'aprovado',
+  reprovado = 'reprovado',
 }

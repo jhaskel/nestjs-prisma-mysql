@@ -17,7 +17,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "preprod": "npm run format && npm run lint",
+    "prod": "npm run build",
+    "heroku-postbuild": "NODE_ENV=dev npm install --omit --no-shrinkwrap && npm run build"
+
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",
@@ -35,6 +39,7 @@
     "class-validator": "^0.14.0",
     "dotenv": "^16.2.0",
     "firebase-admin": "^11.9.0",
+    "moment-timezone": "^0.5.43",
     "nodemailer": "^6.9.3",
     "pug": "^3.0.2",
     "reflect-metadata": "^0.1.13",

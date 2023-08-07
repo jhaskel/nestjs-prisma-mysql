@@ -1,12 +1,8 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreateUsersCargoDto {
-
-  
-  @IsNumber() 
-  userId  :number;
-  @IsString() 
-  name    :string ;
- 
-  
+  @IsNumber()
+  userId: number;
+  @IsString()
+  name: string;
 }

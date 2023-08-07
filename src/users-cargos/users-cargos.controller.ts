@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UsersCargosService } from './users-cargos.service';
 import { CreateUsersCargoDto } from './dto/create-users-cargo.dto';
 import { UpdateUsersCargoDto } from './dto/update-users-cargo.dto';
@@ -9,10 +17,8 @@ export class UsersCargosController {
 
   @Post()
   create(@Body() createUsersCargoDto: CreateUsersCargoDto) {
-    return this.usersCargosService.create(createUsersCargoDto );
+    return this.usersCargosService.create(createUsersCargoDto);
   }
-
-
 
   @Get()
   findAll() {

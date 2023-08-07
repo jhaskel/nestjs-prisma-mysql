@@ -1,11 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { FrotaAbastecimentoService } from './frota-abastecimento.service';
 import { CreateFrotaAbastecimentoDto } from './dto/create-frota-abastecimento.dto';
 import { UpdateFrotaAbastecimentoDto } from './dto/update-frota-abastecimento.dto';
 
-@Controller('frota-abastecimento')
+@Controller('abastecimento')
 export class FrotaAbastecimentoController {
-  constructor(private readonly frotaAbastecimentoService: FrotaAbastecimentoService) {}
+  constructor(
+    private readonly frotaAbastecimentoService: FrotaAbastecimentoService,
+  ) {}
 
   @Post()
   create(@Body() createFrotaAbastecimentoDto: CreateFrotaAbastecimentoDto) {
@@ -23,8 +33,14 @@ export class FrotaAbastecimentoController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFrotaAbastecimentoDto: UpdateFrotaAbastecimentoDto) {
-    return this.frotaAbastecimentoService.update(+id, updateFrotaAbastecimentoDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateFrotaAbastecimentoDto: UpdateFrotaAbastecimentoDto,
+  ) {
+    return this.frotaAbastecimentoService.update(
+      +id,
+      updateFrotaAbastecimentoDto,
+    );
   }
 
   @Delete(':id')

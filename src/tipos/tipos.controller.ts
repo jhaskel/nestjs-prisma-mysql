@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { TiposService } from './tipos.service';
 import { CreateTipoDto } from './dto/create-tipo.dto';
 import { UpdateTipoDto } from './dto/update-tipo.dto';
@@ -9,7 +17,7 @@ export class TiposController {
 
   @Post()
   create(@Body() createTipoDto: CreateTipoDto) {
-    console.log(createTipoDto)
+    console.log(createTipoDto);
     return this.tiposService.create(createTipoDto);
   }
 
@@ -23,7 +31,7 @@ export class TiposController {
     return this.tiposService.findOne(+id);
   }
 
-   @Get('findBySetor/:id')
+  @Get('findBySetor/:id')
   findBySetor(@Param('id') id: string) {
     return this.tiposService.findBySetor(+id);
   }

@@ -1,40 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { FrotaViagemService } from './frota-viagem.service';
 import { CreateFrotaViagemDto } from './dto/create-frota-viagem.dto';
 import { UpdateFrotaViagemDto } from './dto/update-frota-viagem.dto';
-import { UpdateFrotaVeiculoDto } from '../frota-veiculos/dto/update-frota-veiculo.dto';
-import { StatusVeiculo } from 'src/enums/status-veiculos.enum';
+
 import { FrotaVeiculosService } from '../frota-veiculos/frota-veiculos.service';
 import { FrotaVeiculoUserService } from '../frota-veiculo-user/frota-veiculo-user.service';
-
+import { FrotaReservaService } from '../frota-reserva/frota-reserva.service';
 
 @Controller('frotaViagem')
 export class FrotaViagemController {
   constructor(
     private readonly frotaViagemService: FrotaViagemService,
     private readonly frotaVeiculoService: FrotaVeiculosService,
-    private readonly frotaVeiculoUserService: FrotaVeiculoUserService) {}
+    private readonly frotaVeiculoUserService: FrotaVeiculoUserService,
+    private readonly frotaReservaService: FrotaReservaService,
+  ) {}
 
   @Post()
   async create(@Body() createFrotaViagemDto: CreateFrotaViagemDto) {
-
     const dados = await this.frotaViagemService.create(createFrotaViagemDto);
-    //altera status do veiculo
-    const dataVeiculo={    
-      id:dados.veiculoId,
-      status:StatusVeiculo.viagem
-  }
-  this.frotaVeiculoService.updateStatus(dataVeiculo);
 
-  //altera status do veiculoUser se for mesmo usuário
-  const dataVeiculoUser={    
-    id:dados.veiculoId,
-    status:StatusVeiculo.viagem,
-    userId:dados.userId
-}
-this.frotaVeiculoUserService.updateIsOcupando(dataVeiculoUser);
-     
-     return dados;
+    //altera status do veiculo
+    const dataVeiculo = {
+      id: dados.data.veiculoId,
+      isViagem: true,
+    };
+    if (dados) {
+      await this.frotaVeiculoService.updateStatus(dataVeiculo);
+    }
+
+    return dados;
   }
 
   @Get()
@@ -43,8 +46,13 @@ this.frotaVeiculoUserService.updateIsOcupando(dataVeiculoUser);
   }
 
   @Get('findByVeiculo/:id')
-  findByUserFav(@Param('id') id: string) {
+  findByVeiculo(@Param('id') id: string) {
     return this.frotaViagemService.findByVeiculo(+id);
+  }
+
+  @Get('findByUser/:id')
+  findByUser(@Param('id') id: string) {
+    return this.frotaViagemService.findByUser(+id);
   }
 
   @Get(':id')
@@ -52,9 +60,38 @@ this.frotaVeiculoUserService.updateIsOcupando(dataVeiculoUser);
     return this.frotaViagemService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFrotaViagemDto: UpdateFrotaViagemDto) {
-    return this.frotaViagemService.update(+id, updateFrotaViagemDto);
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateFrotaViagemDto: UpdateFrotaViagemDto,
+  ) {
+    const dados = await this.frotaViagemService.update(
+      +id,
+      updateFrotaViagemDto,
+    );
+    //altera status do veiculo
+    const dataVeiculo = {
+      id: dados.data.veiculoId,
+      isViagem: false,
+      km: dados.data.kmFinal,
+    };
+    if (dados) {
+      await this.frotaVeiculoService.updateStatus(dataVeiculo);
+    }
+
+    //altera status da reserva do veiculo
+    if (dados.data.reservaId != null) {
+      const dataFrotaReserva = {
+        id: dados.data.reservaId,
+        isAtivo: false,
+      };
+
+      if (dados) {
+        this.frotaReservaService.updateIsAtivo(dataFrotaReserva);
+      }
+    }
+
+    return dados;
   }
 
   @Delete(':id')

@@ -3,7 +3,7 @@ import { CreateMessageDto } from './create-message.dto';
 import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateMessageDto extends PartialType(CreateMessageDto) {
-    @IsString()
-    @IsOptional()
-    updatedAt:string; 
+  @IsString()
+  @IsOptional()
+  updatedAt: string;
 }

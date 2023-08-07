@@ -5,13 +5,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ConfigsService {
-  constructor(private prisma:PrismaService){}
-
+  constructor(private prisma: PrismaService) {}
 
   create(data: CreateConfigDto) {
     return this.prisma.config.create({
-      data
-    })
+      data,
+    });
   }
 
   findAll() {
@@ -20,37 +19,33 @@ export class ConfigsService {
 
   findOne(id: number) {
     return this.prisma.config.findUnique({
-      where:{id}
-    })
+      where: { id },
+    });
   }
 
   async update(id: number, data: UpdateConfigDto) {
-     
-    await this.exists(id);    
-   
-    return  this.prisma.config.update({
-       data,
-        where:{
-            id:id
-        }
-        
-    });   
+    await this.exists(id);
+
+    return this.prisma.config.update({
+      data,
+      where: {
+        id: id,
+      },
+    });
   }
 
   remove(id: number) {
     return `This action removes a #${id} config`;
   }
 
-  async exists(id:number){
-
-    if(!(await this.prisma.config.count({
-        where :{
-            id
-        }
-
-    })))
-
-
-    throw new NotFoundException(`A entidade ${id} não existe`);
-}
+  async exists(id: number) {
+    if (
+      !(await this.prisma.config.count({
+        where: {
+          id,
+        },
+      }))
+    )
+      throw new NotFoundException(`A entidade ${id} não existe`);
+  }
 }

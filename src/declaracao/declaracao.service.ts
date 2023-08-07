@@ -5,13 +5,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class DeclaracaoService {
-  constructor(private prisma:PrismaService){}
-
+  constructor(private prisma: PrismaService) {}
 
   create(data: CreateDeclaracaoDto) {
     return this.prisma.declaracao.create({
-      data
-    })
+      data,
+    });
   }
 
   findAll() {
@@ -20,37 +19,33 @@ export class DeclaracaoService {
 
   findOne(id: number) {
     return this.prisma.declaracao.findUnique({
-      where:{id}
-    })
+      where: { id },
+    });
   }
 
   async update(id: number, data: UpdateDeclaracaoDto) {
-     
-    await this.exists(id);    
-   
-    return  this.prisma.declaracao.update({
-       data,
-        where:{
-            id:id
-        }
-        
-    });   
+    await this.exists(id);
+
+    return this.prisma.declaracao.update({
+      data,
+      where: {
+        id: id,
+      },
+    });
   }
 
   remove(id: number) {
     return `This action removes a #${id} config`;
   }
 
-  async exists(id:number){
-
-    if(!(await this.prisma.declaracao.count({
-        where :{
-            id
-        }
-
-    })))
-
-
-    throw new NotFoundException(`A declaração ${id} não existe`);
-}
+  async exists(id: number) {
+    if (
+      !(await this.prisma.declaracao.count({
+        where: {
+          id,
+        },
+      }))
+    )
+      throw new NotFoundException(`A declaração ${id} não existe`);
+  }
 }

@@ -1,11 +1,9 @@
-import { IsDecimal, IsNumber } from "class-validator";
+import { IsNumber } from 'class-validator';
 
 export class CreateFrotaAbastecimentoDto {
-    @IsNumber()
-    userId:number;    
-    veiculoId:number;
-    kmAt:number;
-    @IsDecimal()
-    litros:number   
-
+  @IsNumber()
+  userId: number;
+  veiculoId: number;
+  kmAt: number;
+  litros: number;
 }

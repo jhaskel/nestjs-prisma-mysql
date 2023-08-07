@@ -1,29 +1,26 @@
-import { IsEmail, IsOptional, IsString } from "class-validator";
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class CreateConfigDto {
+  @IsOptional()
+  @IsString()
+  logo: string;
 
-    @IsOptional()
-    @IsString()
-    logo:string; 
-   
-    @IsString()
-    name:string;   
-    
-    @IsOptional()
-    @IsString()
-    cnpj:string;
-    
-    @IsString()    
-    endereco:string;  
-    
-    @IsString()    
-    site:string;  
+  @IsString()
+  name: string;
 
-    @IsString()    
-    fone:string;  
-    
-    @IsEmail()
-    email:string;       
-   
-    
+  @IsOptional()
+  @IsString()
+  cnpj: string;
+
+  @IsString()
+  endereco: string;
+
+  @IsString()
+  site: string;
+
+  @IsString()
+  fone: string;
+
+  @IsEmail()
+  email: string;
 }

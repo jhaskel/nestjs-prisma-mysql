@@ -3,10 +3,9 @@ import { UsersCargosService } from './users-cargos.service';
 import { UsersCargosController } from './users-cargos.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
-
 @Module({
-  imports:[PrismaModule],
+  imports: [PrismaModule],
   controllers: [UsersCargosController],
-  providers: [UsersCargosService]
+  providers: [UsersCargosService],
 })
 export class UsersCargosModule {}

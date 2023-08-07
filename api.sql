@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `documentos` (
 
 -- Copiando dados para a tabela api.documentos: ~3 rows (aproximadamente)
 INSERT INTO `documentos` (`id`, `tipoId`, `userId`, `setorId`, `anexoId`, `messageId`, `titulo`, `status`, `codigo`, `ano`, `isInterno`, `isAtivo`, `createdAt`, `updatedAt`) VALUES
-	(12, 1, 1, 1, 2, 1, ' Declaração de Conformidade ', 'Enviado', '15', '2023', 1, 1, '2023-06-22 21:44:16', '2023-06-22 21:44:16'),
+	(12, 1, 1, 1, 2, 1, ' Declaração de Conformidade ', 'Enviado', '1dc', '2023', 1, 1, '2023-06-22 21:44:16', '2023-06-22 21:44:16'),
 	(13, 2, 1, 2, 2, 1, 'Documentos REurb', 'Lido', '12', '2022', 0, 1, '2023-06-21 21:44:16', '2023-06-22 21:44:16'),
 	(14, 6, 1, 2, 2, 1, 'Requerimento Prefeito', 'Analisando', '127', '2023', 1, 1, '2023-06-23 21:44:16', '2023-06-22 21:44:16');
 
@@ -174,18 +174,28 @@ CREATE TABLE IF NOT EXISTS `frotaabastecimento` (
   `veiculoId` int DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `kmAt` int DEFAULT NULL,
-  `litros` double(10,2) DEFAULT NULL,
+  `litros` float DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
   KEY `veiculoId` (`veiculoId`),
   CONSTRAINT `FK__frotaveiculos` FOREIGN KEY (`veiculoId`) REFERENCES `frotaveiculos` (`id`),
   CONSTRAINT `FK__usersfrotaveiculos` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Copiando dados para a tabela api.frotaabastecimento: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela api.frotaabastecimento: ~12 rows (aproximadamente)
 INSERT INTO `frotaabastecimento` (`id`, `userId`, `veiculoId`, `createdAt`, `kmAt`, `litros`) VALUES
-	(1, 1, 1, '2023-07-11 17:21:16', 47852, 55.00),
-	(2, 1, 1, '2023-07-11 19:01:42', 48539, 56.00);
+	(1, 1, 1, '2023-07-11 17:21:16', 47852, 55),
+	(2, 1, 1, '2023-07-11 19:01:42', 48539, 56),
+	(3, 1, 1, '2023-07-11 17:21:16', 48952, 52),
+	(4, 1, 1, NULL, 47800, 55),
+	(5, 1, 1, '2023-07-20 21:01:49', 85500, 44.69),
+	(6, 1, 1, '2023-07-20 21:03:19', 85500, 77.85),
+	(7, 1, 1, NULL, 5263, 78.63),
+	(8, 1, 1, '2023-07-20 21:04:44', 745222, 25.96),
+	(9, 1, 1, '2023-07-20 21:05:14', 75555, 14.96),
+	(10, 1, 1, '2023-07-20 21:06:26', 5654656, 44.96),
+	(11, 1, 1, '2023-07-20 21:07:41', 45557, 44.96),
+	(12, 1, 1, '2023-07-21 18:45:46', 45900, 32);
 
 -- Copiando estrutura para tabela api.frotareservas
 CREATE TABLE IF NOT EXISTS `frotareservas` (
@@ -195,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `frotareservas` (
   `veiculoId` int DEFAULT NULL,
   `destino` varchar(250) DEFAULT NULL,
   `motivo` text,
-  `status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '''pendente'',''Autorizado'',''Não Autorizado''',
+  `status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '''pendente'',''aprovado'',''reprovado''',
   `reservedTo` timestamp NULL DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `modifiedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -207,12 +217,18 @@ CREATE TABLE IF NOT EXISTS `frotareservas` (
   CONSTRAINT `FK_frotareserva_users` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_frotareserva_veiculos` FOREIGN KEY (`veiculoId`) REFERENCES `frotaveiculos` (`id`),
   CONSTRAINT `FK_frotareservas_autorization_users` FOREIGN KEY (`autorizationId`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Copiando dados para a tabela api.frotareservas: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela api.frotareservas: ~7 rows (aproximadamente)
 INSERT INTO `frotareservas` (`id`, `userId`, `autorizationId`, `veiculoId`, `destino`, `motivo`, `status`, `reservedTo`, `createdAt`, `modifiedAt`, `isAtivo`) VALUES
-	(1, 1, 2, 1, 'Rio do Sul', 'Reunião Amavi', 'pendente', '2023-07-11 18:57:16', '2023-07-11 17:19:34', '2023-07-11 17:19:35', 1),
-	(2, 1, 2, 1, 'Rio do Sul', 'Reunião Amavi', 'pendente', '2023-07-11 18:57:16', '2023-07-12 21:50:55', '2023-07-12 21:50:55', 1);
+	(9, 1, NULL, 1, 'Rio do Sul', 'Amavi', 'aprovado', '2023-07-20 11:00:00', '2023-07-19 21:53:15', '2023-07-19 21:53:15', 1),
+	(10, 1, NULL, 2, 'Cascalheira', 'casacalhar rib.Concórdia', 'aprovado', '2023-07-21 19:06:00', '2023-07-19 22:06:19', '2023-07-19 22:06:19', 1),
+	(11, 2, NULL, 1, 'Blumenau', 'casacalhar rib.Concórdia', 'reprovado', '2023-07-21 19:06:00', '2023-07-19 22:06:19', '2023-07-19 22:06:19', 1),
+	(12, 1, NULL, 2, 'Vitóira', 'Barro', 'pendente', '2023-07-21 14:03:00', '2023-07-20 17:03:57', '2023-07-20 17:03:57', 1),
+	(13, 1, NULL, 1, 'Rio do Sul', 'Amavi', 'pendente', '2023-07-18 15:00:00', '2023-07-20 18:25:20', '2023-07-20 18:25:20', 1),
+	(14, 2, NULL, 1, 'Trombudo Central', 'Encontro das Prefeituras', 'aprovado', '2023-07-21 16:30:00', '2023-07-20 21:48:08', '2023-07-20 21:48:08', 1),
+	(15, 1, NULL, 1, '8879879', '879879879', 'aprovado', '2023-07-22 19:17:00', '2023-07-20 22:17:39', '2023-07-20 22:17:39', 1),
+	(16, 1, NULL, 1, 'Centro', 'papel', 'pendente', '2023-07-22 18:36:00', '2023-07-21 21:36:08', '2023-07-21 21:36:08', 1);
 
 -- Copiando estrutura para tabela api.frotaveiculos
 CREATE TABLE IF NOT EXISTS `frotaveiculos` (
@@ -226,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `frotaveiculos` (
   `chassi` varchar(50) DEFAULT NULL,
   `km` int DEFAULT NULL,
   `image` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '''disponível'',''viagem'',''reservado'',''conserto'',''inativo''',
+  `isViagem` tinyint(1) DEFAULT '0',
   `isAtivo` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `setorId` (`setorId`) USING BTREE,
@@ -234,35 +250,32 @@ CREATE TABLE IF NOT EXISTS `frotaveiculos` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Copiando dados para a tabela api.frotaveiculos: ~3 rows (aproximadamente)
-INSERT INTO `frotaveiculos` (`id`, `setorId`, `marca`, `modelo`, `name`, `ano`, `placa`, `chassi`, `km`, `image`, `status`, `isAtivo`) VALUES
-	(1, 3, 'VW', 'Gol 1.0 plus', 'Gol', '1999', 'mbx3456', '4547851266523', 78852, '798987879897', 'viagem', 1),
-	(2, 6, 'Mercedes', 'Caçamba 1113', 'Caçamba 2', '2005', 'opkhjghj', '45455454544', 650523, '87989879987', 'disponível', 1),
-	(3, 3, 'Fiat', 'Doblo 1.8 ', 'Doblo', '2020', 'lop9089', '4545454545445', 125896, '78555', 'viagem', 1);
+INSERT INTO `frotaveiculos` (`id`, `setorId`, `marca`, `modelo`, `name`, `ano`, `placa`, `chassi`, `km`, `image`, `isViagem`, `isAtivo`) VALUES
+	(1, 3, 'VW', 'Gol 1.0 plus', 'Gol', '1999', 'mbx3456', '4547851266523', 45800, '798987879897', 0, 1),
+	(2, 6, 'Mercedes', 'Caçamba 1113', 'Caçamba 2', '2005', 'opkhjghj', '45455454544', 650523, '87989879987', 0, 1),
+	(3, 3, 'Fiat', 'Doblo 1.8 ', 'Doblo', '2020', 'lop9089', '4545454545445', 546546, '78555', 0, 1);
 
 -- Copiando estrutura para tabela api.frotaveiculouser
 CREATE TABLE IF NOT EXISTS `frotaveiculouser` (
   `id` int NOT NULL AUTO_INCREMENT,
   `userId` int DEFAULT NULL,
   `veiculoId` int DEFAULT NULL,
-  `autorizationId` int DEFAULT NULL,
-  `createdAt` timestamp NULL DEFAULT NULL,
-  `updatedAt` timestamp NULL DEFAULT NULL,
   `isAtivo` tinyint(1) DEFAULT '1',
-  `isResponsavel` tinyint(1) DEFAULT '0',
-  `isOcupando` tinyint(1) DEFAULT '0',
+  `isTitular` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
   KEY `veiculoId` (`veiculoId`),
-  KEY `autorizationId` (`autorizationId`),
   CONSTRAINT `FK_frotaveiculouser_frotaveiculos` FOREIGN KEY (`veiculoId`) REFERENCES `frotaveiculos` (`id`),
-  CONSTRAINT `FK_frotaveiculouser_users` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
-  CONSTRAINT `FK_frotaveiculouser_users_2` FOREIGN KEY (`autorizationId`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `FK_frotaveiculouser_users` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Copiando dados para a tabela api.frotaveiculouser: ~2 rows (aproximadamente)
-INSERT INTO `frotaveiculouser` (`id`, `userId`, `veiculoId`, `autorizationId`, `createdAt`, `updatedAt`, `isAtivo`, `isResponsavel`, `isOcupando`) VALUES
-	(1, 1, 1, 13, '2023-07-11 17:19:03', '2023-07-11 17:19:04', 1, 1, 0),
-	(2, 1, 2, 13, '2023-07-11 17:19:03', '2023-07-11 17:19:04', 1, 0, 0);
+-- Copiando dados para a tabela api.frotaveiculouser: ~5 rows (aproximadamente)
+INSERT INTO `frotaveiculouser` (`id`, `userId`, `veiculoId`, `isAtivo`, `isTitular`) VALUES
+	(1, 1, 1, 1, 1),
+	(2, 1, 2, 1, 0),
+	(3, 2, 3, 1, 1),
+	(4, 2, 1, 1, 1),
+	(5, 1, 3, 1, 0);
 
 -- Copiando estrutura para tabela api.frotaviagem
 CREATE TABLE IF NOT EXISTS `frotaviagem` (
@@ -273,7 +286,7 @@ CREATE TABLE IF NOT EXISTS `frotaviagem` (
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `finalAt` timestamp NULL DEFAULT NULL,
   `isAtivo` tinyint(1) DEFAULT '1',
-  `isIniciada` tinyint(1) DEFAULT '1',
+  `isAtiva` tinyint(1) DEFAULT '1',
   `kmInicial` int DEFAULT NULL,
   `kmFinal` int DEFAULT NULL,
   `destino` varchar(250) DEFAULT NULL,
@@ -285,18 +298,22 @@ CREATE TABLE IF NOT EXISTS `frotaviagem` (
   CONSTRAINT `FK_frotaviagem_frotareserva` FOREIGN KEY (`reservaId`) REFERENCES `frotareservas` (`id`),
   CONSTRAINT `FK_frotaviagem_users` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_frotaviagem_veiculos` FOREIGN KEY (`veiculoId`) REFERENCES `frotaveiculos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Copiando dados para a tabela api.frotaviagem: ~0 rows (aproximadamente)
-INSERT INTO `frotaviagem` (`id`, `veiculoId`, `userId`, `reservaId`, `createdAt`, `finalAt`, `isAtivo`, `isIniciada`, `kmInicial`, `kmFinal`, `destino`, `motivo`) VALUES
-	(1, 1, 11, 1, '2023-07-11 19:00:52', '2023-07-11 19:00:54', 1, 0, 74523, 74589, 'Rio do Sul', 'REunião Amavi'),
-	(2, 1, 1, NULL, '2023-07-14 14:43:56', '2023-07-14 14:43:56', 1, 1, 47855, NULL, 'Rio do Sul', 'Reunião Amavi'),
-	(3, 1, 1, NULL, '2023-07-14 14:49:42', '2023-07-14 11:49:42', 1, 1, 47855, NULL, 'Rio do Sul', 'Reunião Amavi'),
-	(4, 1, 1, NULL, '2023-07-14 14:50:05', NULL, 1, 1, 47855, NULL, 'Rio do Sul', 'Reunião Amavi'),
-	(5, 1, 1, NULL, '2023-07-14 15:01:05', NULL, 1, 1, 47855, NULL, 'Rio do Sul', 'Reunião Amavi'),
-	(6, 1, 1, NULL, '2023-07-14 15:09:30', NULL, 1, NULL, 78852, NULL, 'Blumenau', 'registro'),
-	(7, 1, 1, NULL, '2023-07-14 16:22:16', NULL, 1, 1, 47855, NULL, 'Rio do Sul', 'Reunião Amavi'),
-	(8, 1, 1, NULL, '2023-07-14 16:31:44', NULL, 1, 1, 47855, NULL, 'Rio do Sul', 'Reunião Amavi');
+-- Copiando dados para a tabela api.frotaviagem: ~11 rows (aproximadamente)
+INSERT INTO `frotaviagem` (`id`, `veiculoId`, `userId`, `reservaId`, `createdAt`, `finalAt`, `isAtivo`, `isAtiva`, `kmInicial`, `kmFinal`, `destino`, `motivo`) VALUES
+	(40, 1, 1, NULL, '2023-07-19 20:36:06', '2023-07-19 21:30:28', 1, 0, 79000, 79500, 'Rio do Sul', 'Amavi'),
+	(41, 1, 1, NULL, '2023-07-19 21:51:18', '2023-07-19 21:51:31', 1, 0, 79500, 79550, 'Trombudo Central', 'Registro de Imóveis'),
+	(42, 1, 1, NULL, '2023-07-20 18:49:12', '2023-07-20 19:01:45', 1, 0, 79550, 79650, 'Blumenau', 'Regional de santos'),
+	(43, 1, 1, NULL, '2023-07-20 19:02:37', '2023-07-20 19:06:50', 1, 0, 79650, 79600, 'Brusque', 'Vista Tecnica'),
+	(44, 1, 1, NULL, '2023-07-20 19:23:35', '2023-07-20 19:27:22', 1, 0, 79600, 78650, 'Centro', 'Vistorias'),
+	(45, 1, 1, NULL, '2023-07-20 19:28:25', '2023-07-20 19:28:42', 1, 0, 78655, 78755, 'Rio do Sul', 'Amavi'),
+	(46, 1, 1, NULL, '2023-07-20 19:33:46', '2023-07-20 21:06:53', 1, 0, 78755, 45556, 'Blumenai', 'Fortaleza'),
+	(47, 1, 1, NULL, '2023-07-20 21:07:30', '2023-07-20 21:07:51', 1, 0, 45556, 45558, 'Centro', 'Abastecer'),
+	(48, 1, 1, NULL, '2023-07-20 21:21:16', '2023-07-20 21:48:34', 1, 0, 45558, 45700, 'Trombudo Cemtraç', 'Registro Imoveis'),
+	(49, 1, 1, NULL, '2023-07-20 22:03:03', '2023-07-20 22:07:14', 1, 0, 45700, 45750, 'Centro', 'Revisão'),
+	(50, 1, 1, NULL, '2023-07-21 14:09:47', '2023-07-21 14:10:15', 1, 0, 45750, 45782, 'Trombudo Central', 'REgistro de Imóveis'),
+	(51, 1, 1, NULL, '2023-07-21 17:39:35', '2023-07-21 18:46:15', 1, 0, 45782, 45800, 'Trombudo Central', 'Registro de Imóveis');
 
 -- Copiando estrutura para tabela api.messages
 CREATE TABLE IF NOT EXISTS `messages` (
