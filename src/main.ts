@@ -11,6 +11,10 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new LogInterceptor());
+<<<<<<< HEAD
   await app.listen(process.env.PORT || 3000);
+=======
+  await app.listen(3000);
+>>>>>>> d3682b0bc4ca8bc80a084bdd93fe8ee56fc64a50
 }
 bootstrap();
