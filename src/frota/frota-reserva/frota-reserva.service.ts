@@ -71,10 +71,7 @@ export class FrotaReservaService {
     data.setHours(data.getHours() - 3);
     console.log(data.getHours()); // 12
 
-    console.log('agoraa ' + data.toISOString);
-
     const agora = new Date();
-    console.log('agora ' + agora.toISOString());
 
     return this.prisma.frotaReserva.findMany({
       where: {

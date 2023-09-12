@@ -17,7 +17,7 @@ import { Role } from 'src/enums/role.enum';
 
 import { RoleGuard } from 'src/guards/role.guard';
 
-@UseGuards(RoleGuard)
+//@UseGuards(RoleGuard)
 @Controller('frotaReserva')
 export class FrotaReservaController {
   constructor(private readonly frotaReservaService: FrotaReservaService) {}
