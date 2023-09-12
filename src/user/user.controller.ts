@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './DTO/create-user-dto';
-import { UpdatePutUserDto } from './DTO/update-put-user-dto';
+
 import { UpdatePatchUserDto } from './DTO/update-patch-user-dto';
 import { UserService } from './user.service';
 

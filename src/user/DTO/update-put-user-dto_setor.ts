@@ -1,12 +1,4 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsNotIn,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsStrongPassword,
-} from 'class-validator';
+import { IsNumber } from 'class-validator';
 
 export class UpdatePutUserDtoSetor {
   updatedAt;

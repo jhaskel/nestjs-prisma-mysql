@@ -61,7 +61,7 @@ export class FrotaViagemService {
 
   async findByVeiculoByMes(id: number, ano: number) {
     await this.existVeiculo(id);
-    const mes = [];
+
     const dados = await this.prisma.frotaViagem.groupBy({
       by: ['mes'],
       where: {

@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Patch, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { LogInterceptor } from './interceptors/log.interceptor';
 import * as dotenv from 'dotenv';
 

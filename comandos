@@ -34,6 +34,10 @@ npm run preprod
 npm run prod
 npm run start:prod
 
+//github
+git add --all
+git commit -m "final"
+git push origin master
 
 
 
