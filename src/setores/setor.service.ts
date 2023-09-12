@@ -9,12 +9,23 @@ export class SetorService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateSetorDto) {
-    return this.prisma.setor.create({
+    const dados = await this.prisma.setor.create({
       data,
     });
+
+    return {
+      success: true,
+      message: 'Setor Cadastrado',
+      data: dados,
+    };
   }
   async list() {
-    return this.prisma.setor.findMany({});
+    return this.prisma.setor.findMany({
+      include: {
+        sector_secreatario: { select: { name: true } },
+        setor_responsavel: { select: { name: true } },
+      },
+    });
   }
 
   async show(id: number) {
@@ -22,6 +33,10 @@ export class SetorService {
     return this.prisma.setor.findUnique({
       where: {
         id: id,
+      },
+      include: {
+        sector_secreatario: { select: { name: true } },
+        setor_responsavel: { select: { name: true } },
       },
     });
   }
@@ -31,6 +46,10 @@ export class SetorService {
     return this.prisma.setor.findUnique({
       where: {
         id: id,
+      },
+      include: {
+        sector_secreatario: { select: { name: true } },
+        setor_responsavel: { select: { name: true } },
       },
     });
   }

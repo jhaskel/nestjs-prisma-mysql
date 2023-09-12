@@ -45,9 +45,22 @@ export class FrotaViagemController {
     return this.frotaViagemService.findAll();
   }
 
-  @Get('findByVeiculo/:id')
-  findByVeiculo(@Param('id') id: string) {
-    return this.frotaViagemService.findByVeiculo(+id);
+  @Get('findByVeiculo/:id/:ano/:mes')
+  findByVeiculo(
+    @Param('id') id: string,
+    @Param('ano') ano: string,
+    @Param('mes') mes: string,
+  ) {
+    console.log('jjkasdjksajk');
+
+    return this.frotaViagemService.findByVeiculo(+id, +ano, +mes);
+  }
+
+  @Get('findByVeiculoByMes/:id/:ano')
+  findByVeiculoByMes(@Param('id') id: string, @Param('ano') ano: string) {
+    console.log('jjkasdjksajk');
+
+    return this.frotaViagemService.findByVeiculoByMes(+id, +ano);
   }
 
   @Get('findByUser/:id')

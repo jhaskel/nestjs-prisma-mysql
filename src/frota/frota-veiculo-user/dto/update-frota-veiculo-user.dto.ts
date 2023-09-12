@@ -4,8 +4,4 @@ import { IsBoolean } from 'class-validator';
 
 export class UpdateFrotaVeiculoUserDto extends PartialType(
   CreateFrotaVeiculoUserDto,
-) {
-  @IsBoolean()
-  isTitular: boolean;
-  isAtivo: boolean;
-}
+) {}

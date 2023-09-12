@@ -69,12 +69,12 @@ export class AuthService {
         matricula,
       },
       include: {
-        setoruser: { select: { setorId: true } },
+        setores: { select: { id: true, name: true } },
       },
     });
 
     if (!user) {
-      throw new UnauthorizedException('matricula não corresponde!');
+      throw new UnauthorizedException('Matrícula não encontrada!');
     }
 
     if (!(await bcrypt.compare(password, user.password))) {
@@ -87,13 +87,14 @@ export class AuthService {
       id: user.id,
       name: user.name,
       email: user.email,
-      setores: user.setoruser,
       role: user.role,
       image: user.image,
       fone: user.fone,
       matricula: user.matricula,
       cargo: user.cargo,
       token: token,
+      setorId: user.setorId,
+      setores: user.setores,
     };
     return {
       success: true,
@@ -110,7 +111,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('email está incorreto');
+      throw new UnauthorizedException('Email está incorreto');
     }
     const token = this.jwtService.sign(
       {
@@ -173,7 +174,6 @@ export class AuthService {
         id: user.id,
         name: user.name,
         email: user.email,
-        idSetor: user.idSetor,
         role: user.role,
         image: user.image,
         fone: user.fone,

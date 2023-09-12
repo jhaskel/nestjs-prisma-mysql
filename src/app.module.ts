@@ -24,7 +24,6 @@ import { FrotaAbastecimentoModule } from './frota/frota-abastecimento/frota-abas
 import { FrotaReservaModule } from './frota/frota-reserva/frota-reserva.module';
 import { FrotaViagemModule } from './frota/frota-viagem/frota-viagem.module';
 import { AgendaModule } from './agenda/agenda.module';
-import { SetorUserModule } from './setor-user/setor-user.module';
 
 @Module({
   imports: [
@@ -72,7 +71,6 @@ import { SetorUserModule } from './setor-user/setor-user.module';
     FrotaViagemModule,
     FrotaReservaModule,
     AgendaModule,
-    SetorUserModule,
   ],
   controllers: [AppController],
   providers: [

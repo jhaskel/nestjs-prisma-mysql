@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { FrotaVeiculosService } from './frota-veiculos.service';
 import { CreateFrotaVeiculoDto } from './dto/create-frota-veiculo.dto';
@@ -42,6 +43,11 @@ export class FrotaVeiculosController {
     @Body() updateFrotaVeiculoDto: UpdateFrotaVeiculoDto,
   ) {
     return this.frotaVeiculosService.update(+id, updateFrotaVeiculoDto);
+  }
+
+  @Put('ativo/:id')
+  updateAtivo(@Param('id') id: string, @Body() data) {
+    return this.frotaVeiculosService.updateAtivo(+id, data);
   }
 
   @Delete(':id')

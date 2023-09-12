@@ -8,6 +8,10 @@ export class FrotaViagemService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateFrotaViagemDto) {
+    if (data.mes == null) {
+      const mees = new Date().getMonth();
+      data.mes = mees + 1;
+    }
     const dados = await this.prisma.frotaViagem.create({ data });
 
     return {
@@ -21,10 +25,21 @@ export class FrotaViagemService {
     return this.prisma.frotaViagem.findMany();
   }
 
-  async findByVeiculo(id: number) {
-    await this.exists(id);
+  async findByVeiculo(id: number, ano: number, mes: number) {
+    console.log(ano);
+    await this.existVeiculo(id);
+
     return this.prisma.frotaViagem.findMany({
-      where: { veiculoId: id, AND: { isAtivo: true } },
+      where: {
+        veiculoId: id,
+        AND: {
+          isAtivo: true,
+          createdAt: {
+            gte: new Date(ano, mes - 1, 1, 0, 0),
+            lte: new Date(ano, mes - 1, 31, 23, 59),
+          },
+        },
+      },
       include: {
         frotaveiculos: {
           select: {
@@ -33,14 +48,48 @@ export class FrotaViagemService {
             km: true,
             image: true,
             isViagem: true,
-            marca: true,
+            isAtivo: true,
             placa: true,
           },
         },
         users: { select: { id: true, name: true } },
         frotareservas: { select: { id: true, motivo: true, destino: true } },
       },
+      orderBy: { id: 'desc' },
     });
+  }
+
+  async findByVeiculoByMes(id: number, ano: number) {
+    await this.existVeiculo(id);
+    const mes = [];
+    const dados = await this.prisma.frotaViagem.groupBy({
+      by: ['mes'],
+      where: {
+        veiculoId: id,
+        AND: {
+          kmFinal: { gte: 0 },
+          isAtivo: true,
+          createdAt: {
+            gte: new Date(ano, 0 - 1, 1, 0, 0),
+            lte: new Date(ano, 11 - 1, 31, 23, 59),
+          },
+        },
+      },
+      _count: { id: true },
+      _max: { kmFinal: true },
+      _min: { kmInicial: true },
+      orderBy: { mes: 'asc' },
+    });
+
+    const newArray = dados.map((element) => {
+      return {
+        nome: element.mes.toString(),
+        valor: element._max.kmFinal - element._min.kmInicial,
+        quant: element._count.id,
+      };
+    });
+
+    return newArray;
   }
 
   async findByUser(id: number) {
@@ -55,12 +104,15 @@ export class FrotaViagemService {
             km: true,
             image: true,
             isViagem: true,
-            marca: true,
+            isAtivo: true,
             placa: true,
           },
         },
         users: { select: { id: true, name: true } },
         frotareservas: { select: { id: true, motivo: true, destino: true } },
+      },
+      orderBy: {
+        id: 'desc',
       },
     });
   }
@@ -77,8 +129,8 @@ export class FrotaViagemService {
             km: true,
             image: true,
             isViagem: true,
-            marca: true,
             placa: true,
+            isAtivo: true,
           },
         },
         users: { select: { id: true, name: true } },
@@ -122,6 +174,16 @@ export class FrotaViagemService {
     if (
       !(await this.prisma.frotaViagem.count({
         where: { userId: id },
+      }))
+    )
+      throw new NotFoundException(`Não tem viagem para esse usuário`);
+  }
+
+  async existVeiculo(id: number) {
+    console.log(id);
+    if (
+      !(await this.prisma.frotaVeiculos.count({
+        where: { id: id },
       }))
     )
       throw new NotFoundException(`Não tem viagem para esse usuário`);

@@ -32,6 +32,24 @@ export class FrotaAbastecimentoController {
     return this.frotaAbastecimentoService.findOne(+id);
   }
 
+  @Get('findByVeiculo/:id/:ano/:mes')
+  findByVeiculo(
+    @Param('id') id: string,
+    @Param('ano') ano: string,
+    @Param('mes') mes: string,
+  ) {
+    console.log('jjkasdjksajk');
+
+    return this.frotaAbastecimentoService.findByVeiculo(+id, +ano, +mes);
+  }
+
+  @Get('findByVeiculoByMes/:id/:ano')
+  findByVeiculoByMes(@Param('id') id: string, @Param('ano') ano: string) {
+    console.log('jjkasdjksajk');
+
+    return this.frotaAbastecimentoService.findByVeiculoByMes(+id, +ano);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

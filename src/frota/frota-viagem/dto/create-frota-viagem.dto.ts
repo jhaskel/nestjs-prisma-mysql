@@ -7,9 +7,11 @@ export class CreateFrotaViagemDto {
   veiculoId: number;
   veiculoUserId: number;
   kmInicial: number;
+  mes: number;
   @IsString()
   destino: string;
   motivo: string;
+
   @IsBoolean()
   isAtiva: boolean;
 }

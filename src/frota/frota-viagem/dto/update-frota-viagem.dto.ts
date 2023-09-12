@@ -3,7 +3,6 @@ import { CreateFrotaViagemDto } from './create-frota-viagem.dto';
 import { IsDateString, IsNumber } from 'class-validator';
 
 export class UpdateFrotaViagemDto extends PartialType(CreateFrotaViagemDto) {
-  isAtiva: boolean;
   isAtivo: boolean;
   @IsDateString()
   finalAt;

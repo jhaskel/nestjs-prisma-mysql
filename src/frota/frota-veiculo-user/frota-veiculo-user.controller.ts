@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { FrotaVeiculoUserService } from './frota-veiculo-user.service';
 import { CreateFrotaVeiculoUserDto } from './dto/create-frota-veiculo-user.dto';
@@ -33,12 +34,17 @@ export class FrotaVeiculoUserController {
     return this.frotaVeiculoUserService.findByUser(+id);
   }
 
+  @Get('findUsersByVeiculo/:id')
+  findUsersByVeiculo(@Param('id') id: string) {
+    return this.frotaVeiculoUserService.findUsersByVeiculo(+id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.frotaVeiculoUserService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateFrotaVeiculoUserDto: UpdateFrotaVeiculoUserDto,

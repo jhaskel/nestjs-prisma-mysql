@@ -1,11 +1,11 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateAgendaDto {
-  retornoAt;
   @IsNumber()
   userId: number;
-  setorId: number;
   @IsString()
   situacao: string;
   local: string;
+  status: string;
+  retornoAt: string;
 }

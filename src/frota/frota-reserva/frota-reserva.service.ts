@@ -51,7 +51,7 @@ export class FrotaReservaService {
             km: true,
             image: true,
             isViagem: true,
-            marca: true,
+            isAtivo: true,
             placa: true,
             responsavelId: true,
             responsavel: { select: { id: true, name: true } },
@@ -92,8 +92,8 @@ export class FrotaReservaService {
             km: true,
             image: true,
             isViagem: true,
-            marca: true,
             placa: true,
+            isAtivo: true,
             responsavelId: true,
             responsavel: { select: { id: true, name: true } },
           },
@@ -106,7 +106,7 @@ export class FrotaReservaService {
 
   async update(id: number, data: UpdateFrotaReservaDto) {
     await this.exists(id);
-    console.log('iiiiiiiiiii' + data.isAtivo);
+
     const dados = await this.prisma.frotaReserva.update({
       where: { id },
       data: data,

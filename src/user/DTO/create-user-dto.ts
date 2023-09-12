@@ -9,33 +9,39 @@ import {
 import { Role } from 'src/enums/role.enum';
 
 export class CreateUserDto {
+  @IsNumber()
+  setorId: number;
   @IsString()
   name: string;
   @IsEmail()
   email: string;
+
+  @IsOptional()
   @IsStrongPassword({
-    minLength: 6,
+    minLength: 3,
     minLowercase: 0,
     minNumbers: 0,
     minSymbols: 0,
     minUppercase: 0,
   })
   password: string;
+
   @IsOptional()
   @IsString()
   image: string;
+
   @IsOptional()
   @IsEnum(Role)
   role: number;
   @IsOptional()
   @IsString()
   cargo: string;
+
   @IsOptional()
   @IsString()
-  matricula;
+  matricula: string;
   @IsOptional()
   @IsString()
-  token;
-  @IsNumber()
-  idSetor: number;
+  token: string;
+  fone: string;
 }

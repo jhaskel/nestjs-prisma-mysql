@@ -9,8 +9,8 @@ datasource db {
 
 model User {
   id                                                Int                  @id @default(autoincrement())
-  role                                              Int                  @default(1)
-  idSetor                                           Int                  @default(1)
+  role                                              Int                  @default(2)
+  setorId                                           Int                  @default(2)
   name                                              String               @db.VarChar(128)
   email                                             String               @unique @db.VarChar(128)
   password                                          String               @db.VarChar(128)
@@ -23,7 +23,7 @@ model User {
   isAtivo                                           Boolean              @default(true)
   createdAt                                         DateTime?            @default(now()) @db.Timestamp(0)
   updatedAt                                         DateTime?            @default(now()) @db.Timestamp(0)
-  agenda                                            Agenda[]
+  agenda                                            Agenda?
   documentos                                        Documento[]
   docuser                                           docuser[]
   favoritos                                         favoritos[]
@@ -35,30 +35,32 @@ model User {
   frotaviagems                                      FrotaViagem[]
   messages_messages_remetenteTousers                messages[]           @relation("messages_remetenteTousers")
   messages_messages_destinatarioTousers             messages[]           @relation("messages_destinatarioTousers")
-  setores                                           Setor[]
-  setoruser                                         setoruser[]
+  secretario                                        Setor[]              @relation("setores_secretarioIdTousers")
+  responsavel                                       Setor[]              @relation("setores_responsavelIdTousers")
   usercargos                                        UserCargo[]
+  setores                                           Setor                @relation("users_setorIdTosetores", fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_users_setores")
 
+  @@index([setorId], map: "FK_users_setores")
   @@map("users")
 }
 
 model Setor {
-  id            Int             @id @default(autoincrement())
-  secretarioId  Int?
-  name          String          @default("0") @db.VarChar(50)
-  responsavel   String?         @db.VarChar(50)
-  email         String?         @db.VarChar(50)
-  secretario    String?         @db.VarChar(50)
-  sigla         String?         @db.VarChar(10)
-  image         String?         @db.VarChar(250)
-  agenda        Agenda[]
-  documentos    Documento[]
-  frotaveiculos FrotaVeiculos[]
-  users         User?           @relation(fields: [secretarioId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_setores_users")
-  setoruser     setoruser[]
-  tipos         Tipo[]
+  id                           Int             @id @default(autoincrement())
+  secretarioId                 Int?            @default(1)
+  name                         String          @default("0") @db.VarChar(50)
+  responsavelId                Int?            @default(1)
+  email                        String?         @db.VarChar(50)
+  sigla                        String?         @db.VarChar(10)
+  image                        String?         @db.VarChar(250)
+  documentos                   Documento[]
+  frotaveiculos                FrotaVeiculos[]
+  sector_secreatario           User?           @relation("setores_secretarioIdTousers", fields: [secretarioId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_setores_users")
+  setor_responsavel            User?           @relation("setores_responsavelIdTousers", fields: [responsavelId], references: [id], onDelete: Cascade, map: "FK_setores_users_2")
+  tipos                        Tipo[]
+  users_users_setorIdTosetores User[]          @relation("users_setorIdTosetores")
 
   @@index([secretarioId], map: "FK_setores_users")
+  @@index([responsavelId], map: "responsavelId")
   @@map("setores")
 }
 
@@ -93,11 +95,11 @@ model Documento {
   updatedAt                               DateTime?    @default(now()) @db.Timestamp(0)
   anexo                                   anexo[]
   declaracao                              Declaracao[]
-  tipos                                   Tipo         @relation(fields: [tipoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__tipos")
-  anexxos                                 anexo?       @relation("documentos_anexoIdToanexo", fields: [anexoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_documentos_anexo")
-  messages_documentos_messageIdTomessages messages?    @relation("documentos_messageIdTomessages", fields: [messageId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_documentos_messages")
-  setores                                 Setor?       @relation(fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_documentos_setores")
-  users                                   User?        @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_documentos_users")
+  tipos                                   Tipo         @relation(fields: [tipoId], references: [id], onUpdate: Restrict, map: "FK__tipos")
+  anexxos                                 anexo?       @relation("documentos_anexoIdToanexo", fields: [anexoId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_documentos_anexo")
+  messages_documentos_messageIdTomessages messages?    @relation("documentos_messageIdTomessages", fields: [messageId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_documentos_messages")
+  setores                                 Setor?       @relation(fields: [setorId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_documentos_setores")
+  users                                   User?        @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_documentos_users")
   docuser                                 docuser[]
   favoritos                               favoritos[]
   mess                                    messages[]
@@ -146,7 +148,7 @@ model Declaracao {
   assign       String?    @db.VarChar(150)
   cargo        String?    @db.VarChar(50)
   matricula    String?    @db.VarChar(50)
-  documentos   Documento? @relation(fields: [documentoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_1dc_documentos")
+  documentos   Documento? @relation(fields: [documentoId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_1dc_documentos")
 
   @@index([documentoId], map: "documentoId")
   @@map("declaracao")
@@ -158,8 +160,8 @@ model docuser {
   userId     Int?
   createdAt  DateTime?  @default(now()) @db.Timestamp(0)
   updatedAt  DateTime?  @default(now()) @db.Timestamp(0)
-  documentos Documento? @relation(fields: [docId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_docuser_documentos")
-  users      User?      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_docuser_users")
+  documentos Documento? @relation(fields: [docId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_docuser_documentos")
+  users      User?      @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_docuser_users")
 
   @@index([docId], map: "docId")
   @@index([userId], map: "userId")
@@ -188,8 +190,8 @@ model messages {
   updatedAt                                 DateTime    @default(now()) @db.Timestamp(0)
   documentos_documentos_messageIdTomessages Documento[] @relation("documentos_messageIdTomessages")
   documentos                                Documento   @relation(fields: [documentoId], references: [id], onDelete: Cascade, map: "FK__documentos")
-  users_messages_remetenteTousers           User        @relation("messages_remetenteTousers", fields: [remetente], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__users")
-  users_messages_destinat_rioTousers        User        @relation("messages_destinatarioTousers", fields: [destinatario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_messages_users")
+  users_messages_remetenteTousers           User        @relation("messages_remetenteTousers", fields: [remetente], references: [id], onUpdate: Restrict, map: "FK__users")
+  users_messages_destinat_rioTousers        User        @relation("messages_destinatarioTousers", fields: [destinatario], references: [id], onUpdate: Restrict, map: "FK_messages_users")
 
   @@index([documentoId], map: "documentoId")
   @@index([remetente], map: "remetente")
@@ -211,11 +213,13 @@ model FrotaAbastecimento {
   id            Int            @id @default(autoincrement())
   userId        Int?
   veiculoId     Int?
+  mes           Int?
   createdAt     DateTime?      @default(now()) @db.Timestamp(0)
   kmAt          Int?
-  litros        Float?         @db.Float
-  frotaveiculos FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__frotaveiculos")
-  users         User?          @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__usersfrotaveiculos")
+  litros        Int?
+  media         Decimal?       @db.Decimal(10, 2)
+  frotaveiculos FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK__frotaveiculos")
+  users         User?          @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK__usersfrotaveiculos")
 
   @@index([userId], map: "userId")
   @@index([veiculoId], map: "veiculoId")
@@ -234,10 +238,11 @@ model FrotaViagem {
   kmInicial     Int?
   kmFinal       Int?
   destino       String?        @db.VarChar(250)
+  mes           Int?
   motivo        String?        @db.Text
-  frotareservas FrotaReserva?  @relation(fields: [reservaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaviagem_frotareserva")
-  users         User?          @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaviagem_users")
-  frotaveiculos FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaviagem_veiculos")
+  frotareservas FrotaReserva?  @relation(fields: [reservaId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_frotaviagem_frotareserva")
+  users         User?          @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_frotaviagem_users")
+  frotaveiculos FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_frotaviagem_veiculos")
 
   @@index([reservaId], map: "reservaId")
   @@index([userId], map: "userId")
@@ -257,9 +262,9 @@ model FrotaReserva {
   createdAt      DateTime?      @default(now()) @db.Timestamp(0)
   modifiedAt     DateTime?      @default(now()) @db.Timestamp(0)
   isAtivo        Boolean?       @default(true)
-  users          User?          @relation("frotareservas_userIdTousers", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotareserva_users")
-  frotaveiculos  FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotareserva_veiculos")
-  autorization   User?          @relation("frotareservas_autorizationIdTousers", fields: [autorizationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotareservas_autorization_users")
+  users          User?          @relation("frotareservas_userIdTousers", fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_frotareserva_users")
+  frotaveiculos  FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_frotareserva_veiculos")
+  autorization   User?          @relation("frotareservas_autorizationIdTousers", fields: [autorizationId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_frotareservas_autorization_users")
   frotaviagems   FrotaViagem[]
 
   @@index([autorizationId], map: "autorizationId")
@@ -272,21 +277,16 @@ model FrotaVeiculos {
   id                 Int                  @id @default(autoincrement())
   setorId            Int?
   responsavelId      Int?
-  marca              String?              @db.VarChar(50)
-  modelo             String?              @db.VarChar(100)
   name               String?              @db.VarChar(10)
-  ano                String?              @db.VarChar(50)
   placa              String?              @db.VarChar(10)
-  chassi             String?              @db.VarChar(50)
   km                 Int?
-  litros             Int?
   image              String?              @db.VarChar(250)
   isViagem           Boolean?             @default(false)
   isAtivo            Boolean?             @default(true)
   frotaabastecimento FrotaAbastecimento[]
   frotareservas      FrotaReserva[]
-  setores            Setor?               @relation(fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculos_setores")
-  responsavel        User?                @relation(fields: [responsavelId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculos_users")
+  setores            Setor?               @relation(fields: [setorId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_frotaveiculos_setores")
+  responsavel        User?                @relation(fields: [responsavelId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_frotaveiculos_users")
   frotaveiculouser   FrotaVeiculoUser[]
   frotaviagems       FrotaViagem[]
 
@@ -300,9 +300,9 @@ model FrotaVeiculoUser {
   userId    Int?
   veiculoId Int?
   isAtivo   Boolean?       @default(true)
-  isTitular Boolean?       @default(false)
-  veiculos  FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculouser_frotaveiculos")
-  usuario   User?          @relation("frotaveiculouser_userIdTousers", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_frotaveiculouser_users")
+  isTitular Boolean?
+  veiculos  FrotaVeiculos? @relation(fields: [veiculoId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_frotaveiculouser_frotaveiculos")
+  usuario   User?          @relation("frotaveiculouser_userIdTousers", fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_frotaveiculouser_users")
 
   @@index([userId], map: "userId")
   @@index([veiculoId], map: "veiculoId")
@@ -311,30 +311,15 @@ model FrotaVeiculoUser {
 
 model Agenda {
   id         Int       @id @default(autoincrement())
-  userId     Int?
-  setorId    Int?
+  userId     Int?      @unique(map: "userId")
   createdAt  DateTime? @default(now()) @db.Timestamp(0)
   modifiedAt DateTime? @default(now()) @db.Timestamp(0)
   isAtivo    Boolean?  @default(true)
   situacao   String?   @db.Text
-  status     String    @default("trabalhando") @db.VarChar(50)
+  status     String?   @db.VarChar(50)
   local      String?   @db.VarChar(250)
-  retornoAt  DateTime? @default(now()) @db.Timestamp(0)
-  setores    Setor?    @relation(fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_agenda_tipos")
+  retornoAt  String?   @db.VarChar(250)
   users      User?     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_agenda_users")
 
-  @@index([setorId], map: "setorId")
-  @@index([userId], map: "userId")
   @@map("agenda")
-}
-
-model setoruser {
-  id      Int   @id @default(autoincrement())
-  userId  Int
-  setorId Int
-  setores Setor @relation(fields: [setorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_setoruser_setores")
-  users   User  @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_setoruser_users")
-
-  @@index([setorId], map: "FK_setoruser_setores")
-  @@index([userId], map: "FK_setoruser_users")
 }

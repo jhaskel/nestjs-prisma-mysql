@@ -8,13 +8,24 @@ export class FrotaVeiculosService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateFrotaVeiculoDto) {
-    return this.prisma.frotaVeiculos.create({
+    const dados = await this.prisma.frotaVeiculos.create({
       data,
     });
+
+    return {
+      success: true,
+      message: 'Veículo adicionado  com sucesso',
+      data: dados,
+    };
   }
 
   async findAll() {
-    return this.prisma.frotaVeiculos.findMany();
+    return this.prisma.frotaVeiculos.findMany({
+      include: {
+        setores: { select: { id: true, name: true } },
+        responsavel: { select: { id: true, name: true } },
+      },
+    });
   }
 
   async findBySetor(id: number) {
@@ -39,6 +50,18 @@ export class FrotaVeiculosService {
   async update(id: number, data: UpdateFrotaVeiculoDto) {
     await this.exists(id);
     console.log(data);
+    return this.prisma.frotaVeiculos.update({
+      data,
+      where: {
+        id: id,
+      },
+    });
+  }
+
+  async updateAtivo(id: number, data) {
+    await this.exists(id);
+    console.log(data);
+    console.log(id);
     return this.prisma.frotaVeiculos.update({
       data,
       where: {

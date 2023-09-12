@@ -8,7 +8,8 @@ export class FrotaVeiculoUserService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateFrotaVeiculoUserDto) {
-    const dados = this.prisma.frotaVeiculoUser.create({
+    data.isAtivo = true;
+    const dados = await this.prisma.frotaVeiculoUser.create({
       data,
     });
     return {
@@ -26,6 +27,7 @@ export class FrotaVeiculoUserService {
     await this.exists(id);
     return this.prisma.frotaVeiculoUser.findFirst({
       where: { id },
+      include: {},
     });
   }
 
@@ -51,7 +53,7 @@ export class FrotaVeiculoUserService {
             km: true,
             image: true,
             isViagem: true,
-            marca: true,
+            isAtivo: true,
             placa: true,
             responsavelId: true,
             responsavel: { select: { id: true, name: true } },
@@ -63,16 +65,47 @@ export class FrotaVeiculoUserService {
     return dados;
   }
 
+  async findUsersByVeiculo(id: number) {
+    console.log('chegouhj ' + id);
+    const dados = this.prisma.frotaVeiculoUser.findMany({
+      where: {
+        veiculoId: id,
+        AND: [
+          {
+            isAtivo: true,
+          },
+          { veiculos: { isAtivo: true } },
+        ],
+      },
+
+      orderBy: { id: 'desc' },
+
+      include: {
+        usuario: { select: { id: true, name: true, image: true } },
+      },
+    });
+
+    return dados;
+  }
+
   async update(id: number, data: UpdateFrotaVeiculoUserDto) {
     await this.exists(id);
     console.log(data);
-    return this.prisma.frotaVeiculoUser.update({
+    console.log(id);
+    const dados = await this.prisma.frotaVeiculoUser.update({
       data,
 
       where: {
         id: id,
       },
     });
+    console.log(dados);
+
+    return {
+      success: true,
+      message: 'Veículo adicionado ao usuário',
+      data: dados,
+    };
   }
 
   async remove(id: number) {

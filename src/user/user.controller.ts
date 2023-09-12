@@ -18,25 +18,29 @@ import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enum';
 import { RoleGuard } from 'src/guards/role.guard';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { UpdatePutUserDto1 } from './DTO/update-put-user-dto1';
+import { UpdatePutUserDtoSetor } from './DTO/update-put-user-dto_setor';
 
 //@UseInterceptors(LogInterceptor)
+
 @UseGuards(AuthGuard, RoleGuard)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   // @UseInterceptors(LogInterceptor)
-  @Roles(Role.Admin)
+  @Roles(Role.SuperAdmin, Role.Secretario, Role.Master)
   @Post()
   async create(@Body() data: CreateUserDto) {
     return this.userService.create(data);
   }
 
-  @Roles(Role.Admin, Role.User)
+  @Roles(Role.SuperAdmin, Role.Secretario, Role.Controle, Role.Master)
   @Get()
   async list() {
     return this.userService.list();
   }
+
   @Roles(Role.Admin, Role.User)
   @Get(':id')
   async show(@ParamId() id: number) {
@@ -46,8 +50,18 @@ export class UserController {
 
   @Roles(Role.Admin)
   @Put(':id')
-  async update(@Body() data: UpdatePutUserDto, @ParamId() id: number) {
+  async update(@Body() data: UpdatePutUserDto1, @ParamId() id: number) {
     return this.userService.update(id, data);
+  }
+
+  @Roles(Role.SuperAdmin, Role.Secretario, Role.Controle, Role.Master)
+  @Put('setor/:id')
+  async updateSetor(
+    @Body() data: UpdatePutUserDtoSetor,
+    @ParamId() id: number,
+  ) {
+    console.log('chegou  ' + data.setorId);
+    return this.userService.updateSetor(id, data);
   }
 
   @Roles(Role.Admin)

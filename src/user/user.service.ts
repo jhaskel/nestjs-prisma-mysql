@@ -5,16 +5,16 @@ import { UpdatePutUserDto } from './DTO/update-put-user-dto';
 import { UpdatePatchUserDto } from './DTO/update-patch-user-dto';
 import * as bcrypt from 'bcrypt';
 
-import { SetorUserService } from 'src/setor-user/setor-user.service';
-
 import { CreateAgendaDto } from 'src/agenda/dto/create-agenda.dto';
 import { AgendaService } from 'src/agenda/agenda.service';
+import { UpdatePutUserDto1 } from './DTO/update-put-user-dto1';
+import { UpdatePutUserDtoSetor } from './DTO/update-put-user-dto_setor';
 
 @Injectable()
 export class UserService {
   constructor(
     private prisma: PrismaService,
-    private readonly setorUserService: SetorUserService,
+
     private readonly agendaService: AgendaService,
   ) {}
 
@@ -31,15 +31,16 @@ export class UserService {
       );
     }
 
-    data.password = data.password;
+    data.password = '123'; //senha padrão pra usuario = 123
+    data.role = 2;
     const salt = await bcrypt.genSalt();
     data.password = await bcrypt.hash(data.password, salt);
+
+    console.log(data.password);
 
     const dado = await this.prisma.user.create({
       data,
     });
-
-    console.log(dado.id);
 
     const data2 = {
       id: dado.id,
@@ -48,22 +49,36 @@ export class UserService {
       role: dado.role,
       image: dado.image,
       fone: dado.fone,
-
       matricula: dado.matricula,
+      setorId: dado.setorId,
     };
+
+    //cadastra no agenda
+    const dados3: CreateAgendaDto = {
+      userId: dado.id,
+      retornoAt: '0',
+      situacao: 'Trabalhando',
+      local: 'De costume',
+      status: 'expediente',
+    };
+
+    await this.agendaService.create(dados3);
+
+    //retorna dados da usuaruio criado
     return {
       success: true,
-      message: 'Usuário Autenticado',
+      message: 'Usuário Registrado',
       data: data2,
     };
   }
+
   async createRegister(data: CreateUserDto) {
     const dados = await this.prisma.user.findUnique({
       where: {
         email: data.email,
       },
       include: {
-        setoruser: { select: { setorId: true } },
+        //    setoruser: { select: { setorId: true } },
       },
     });
 
@@ -82,19 +97,14 @@ export class UserService {
     });
     console.log(criar.id);
 
-    const dados2 = {
-      setorId: criar.idSetor,
-      userId: criar.id,
-    };
-    //cadastra no setoruser
-    await this.setorUserService.create(dados2);
-
     const dados3: CreateAgendaDto = {
-      setorId: criar.idSetor,
+      //   setorId: criar.idSetor,
+
       userId: criar.id,
-      retornoAt: new Date(),
-      situacao: '',
-      local: '',
+      retornoAt: '',
+      situacao: 'expediente',
+      local: 'de costume',
+      status: 'expediente',
     };
 
     //cadastra no agenda
@@ -104,7 +114,11 @@ export class UserService {
   }
 
   async list() {
+    console.log('JOao Haskel');
     return this.prisma.user.findMany({
+      include: {
+        setores: { select: { id: true, name: true } },
+      },
       orderBy: [
         {
           name: 'asc',
@@ -123,7 +137,7 @@ export class UserService {
         id: id,
       },
       include: {
-        setores: {
+        secretario: {
           select: {
             name: true,
             id: true,
@@ -148,7 +162,33 @@ export class UserService {
     });
   }
 
-  async update(id: number, data: UpdatePutUserDto) {
+  async update(id: number, data: UpdatePutUserDto1) {
+    await this.exists(id);
+
+    if (!data.updatedAt) {
+      data.updatedAt = new Date().toISOString();
+    }
+    return this.prisma.user.update({
+      data,
+      where: {
+        id: id,
+      },
+    });
+  }
+
+  async updateSetor(id: number, data: UpdatePutUserDtoSetor) {
+    if (!data.updatedAt) {
+      data.updatedAt = new Date().toISOString();
+    }
+    return this.prisma.user.update({
+      data,
+      where: {
+        id: id,
+      },
+    });
+  }
+
+  async update2(id: number, data: UpdatePutUserDto) {
     await this.exists(id);
     const salt = await bcrypt.genSalt();
 
