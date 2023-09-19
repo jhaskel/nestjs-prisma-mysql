@@ -310,16 +310,18 @@ model FrotaVeiculoUser {
 }
 
 model Agenda {
-  id         Int       @id @default(autoincrement())
-  userId     Int?      @unique(map: "userId")
-  createdAt  DateTime? @default(now()) @db.Timestamp(0)
-  modifiedAt DateTime? @default(now()) @db.Timestamp(0)
-  isAtivo    Boolean?  @default(true)
-  situacao   String?   @db.Text
-  status     String?   @db.VarChar(50)
-  local      String?   @db.VarChar(250)
-  retornoAt  String?   @db.VarChar(250)
-  users      User?     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_agenda_users")
+  id               Int       @id @default(autoincrement())
+  userId           Int?      @unique(map: "userId")
+  createdAt        DateTime? @default(now()) @db.Timestamp(0)
+  modifiedAt       DateTime? @default(now()) @db.Timestamp(0)
+  isAtivo          Boolean?  @default(true)
+  situacao         String?   @db.Text
+  situacao_default String?   @db.Text
+  status           String?   @db.VarChar(50)
+  local            String?   @db.VarChar(250)
+  local_default    String?   @db.VarChar(250)
+  retornoAt        String?   @db.VarChar(250)
+  users            User?     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_agenda_users")
 
   @@map("agenda")
 }

@@ -1,10 +1,8 @@
-import { IsString } from 'class-validator';
+
 
 export class UpdateAgendaIniDto {
-  modifiedAt;
-  retornoAt;
-  @IsString()
-  situacao: string;
-  local: string;
-  status: string;
+  id:number
+  situacao_default: string;
+  local_default: string;
+ 
 }

@@ -60,7 +60,7 @@ export class FrotaReservaController {
     return this.frotaReservaService.updateAtivo(data);
   }
 
-  @Roles(Role.SuperAdmin)
+  @Roles(Role.Admin)
   @Put('status/:id')
   updateStatus(@Param('id') id: string, @Body() data) {
     return this.frotaReservaService.updateStatus(data);

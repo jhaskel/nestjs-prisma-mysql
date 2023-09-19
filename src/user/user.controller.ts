@@ -29,13 +29,13 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   // @UseInterceptors(LogInterceptor)
-  @Roles(Role.SuperAdmin, Role.Secretario, Role.Master)
+  @Roles(Role.Admin, Role.Secretario, Role.Master)
   @Post()
   async create(@Body() data: CreateUserDto) {
     return this.userService.create(data);
   }
 
-  @Roles(Role.SuperAdmin, Role.Secretario, Role.Controle, Role.Master)
+  @Roles(Role.Admin, Role.Secretario, Role.Controle, Role.Master)
   @Get()
   async list() {
     return this.userService.list();
@@ -54,7 +54,7 @@ export class UserController {
     return this.userService.update(id, data);
   }
 
-  @Roles(Role.SuperAdmin, Role.Secretario, Role.Controle, Role.Master)
+  @Roles(Role.Admin, Role.Secretario, Role.Controle, Role.Master)
   @Put('setor/:id')
   async updateSetor(
     @Body() data: UpdatePutUserDtoSetor,

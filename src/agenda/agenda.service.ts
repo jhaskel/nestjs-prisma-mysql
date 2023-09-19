@@ -21,8 +21,7 @@ export class AgendaService {
       },
     });
 
-    const dd = await this.findOne(3);
-    console.log(dd);
+    
 
     const reduced = [];
 
@@ -65,7 +64,12 @@ export class AgendaService {
   }
 
   async update(id: number, data: UpdateAgendaDto) {
-    data.modifiedAt = data.modifiedAt + 'Z';
+   
+    if (!data.modifiedAt) {
+
+      
+      data.modifiedAt = new Date().toISOString();
+    }
 
     await this.exists(id);
     return this.prisma.agenda.update({
@@ -75,16 +79,19 @@ export class AgendaService {
   }
 
   async updateInit(id: number, data: UpdateAgendaIniDto) {
-    console.log('sdsadasjdasjkdasjkdsa');
-    if (!data.modifiedAt) {
-      data.modifiedAt = new Date().toISOString();
-    }
-
+      
     await this.exists(id);
-    return this.prisma.agenda.update({
+    var dados = await this.prisma.agenda.update({
       where: { id: id },
       data: data,
     });
+    console.log("dados "+dados.situacao_default)
+
+    return {
+      success: true,
+      message: 'Veículo adicionado  com sucesso',
+      data: dados,
+    };
   }
 
   async remove(id: number) {

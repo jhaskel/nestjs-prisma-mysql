@@ -46,7 +46,7 @@ export class AgendaController {
     @Param('id') id: string,
     @Body() updateAgendaDto: UpdateAgendaIniDto,
   ) {
-    console.log('jkkkkkkkkkkkkkkk');
+    
     return this.agendaService.updateInit(+id, updateAgendaDto);
   }
 
