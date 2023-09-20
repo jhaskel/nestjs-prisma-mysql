@@ -6,5 +6,4 @@ export class UpdateAgendaDto extends PartialType(CreateAgendaDto) {
   modifiedAt;
   local_default;
   situacao_default;
-
 }

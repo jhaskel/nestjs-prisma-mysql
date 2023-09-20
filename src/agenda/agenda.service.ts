@@ -21,8 +21,6 @@ export class AgendaService {
       },
     });
 
-    
-
     const reduced = [];
 
     dados.forEach((item) => {
@@ -40,9 +38,9 @@ export class AgendaService {
   }
 
   async findOne(id: number) {
-    await this.exists(id);
+    await this.existsUser(id);
     return this.prisma.agenda.findUnique({
-      where: { id },
+      where: { userId: id },
       include: {
         users: {
           select: {
@@ -64,10 +62,7 @@ export class AgendaService {
   }
 
   async update(id: number, data: UpdateAgendaDto) {
-   
     if (!data.modifiedAt) {
-
-      
       data.modifiedAt = new Date().toISOString();
     }
 
@@ -79,13 +74,12 @@ export class AgendaService {
   }
 
   async updateInit(id: number, data: UpdateAgendaIniDto) {
-      
     await this.exists(id);
-    var dados = await this.prisma.agenda.update({
+    const dados = await this.prisma.agenda.update({
       where: { id: id },
       data: data,
     });
-    console.log("dados "+dados.situacao_default)
+    console.log('dados ' + dados.situacao_default);
 
     return {
       success: true,
@@ -103,6 +97,15 @@ export class AgendaService {
     if (
       !(await this.prisma.agenda.count({
         where: { id },
+      }))
+    )
+      throw new NotFoundException(`Compromisso com id ${id} não existe`);
+  }
+
+  async existsUser(id: number) {
+    if (
+      !(await this.prisma.agenda.count({
+        where: { userId: id },
       }))
     )
       throw new NotFoundException(`Compromisso com id ${id} não existe`);

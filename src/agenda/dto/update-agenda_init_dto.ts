@@ -1,8 +1,5 @@
-
-
 export class UpdateAgendaIniDto {
-  id:number
+  id: number;
   situacao_default: string;
   local_default: string;
- 
 }

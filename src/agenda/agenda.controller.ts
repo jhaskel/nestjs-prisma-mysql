@@ -33,7 +33,6 @@ export class AgendaController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    console.log('tempos moderno');
     return this.agendaService.findOne(+id);
   }
 
@@ -46,7 +45,6 @@ export class AgendaController {
     @Param('id') id: string,
     @Body() updateAgendaDto: UpdateAgendaIniDto,
   ) {
-    
     return this.agendaService.updateInit(+id, updateAgendaDto);
   }
 
